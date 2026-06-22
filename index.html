@@ -42,17 +42,10 @@
       display: block;
     }
     @keyframes fadeSlide {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== واجهة المصادقة ===== */
     .auth-container h1 {
       font-size: 30px;
       font-weight: 700;
@@ -144,7 +137,6 @@
       transform: scale(0.98);
     }
 
-    /* صندوق الرسائل الاحترافي */
     #auth-message {
       margin-top: 18px;
       padding: 12px 16px;
@@ -156,28 +148,11 @@
       border-left: 4px solid transparent;
       transition: 0.3s;
     }
-    .msg-success {
-      color: #2ecc71;
-      border-left-color: #2ecc71;
-      background: rgba(46, 204, 113, 0.08);
-    }
-    .msg-error {
-      color: #ff6b6b;
-      border-left-color: #ff6b6b;
-      background: rgba(255, 107, 107, 0.08);
-    }
-    .msg-loading {
-      color: #fdcb6e;
-      border-left-color: #fdcb6e;
-      background: rgba(253, 203, 110, 0.08);
-    }
-    .msg-info {
-      color: #74b9ff;
-      border-left-color: #74b9ff;
-      background: rgba(116, 185, 255, 0.08);
-    }
+    .msg-success { color: #2ecc71; border-left-color: #2ecc71; background: rgba(46,204,113,0.08); }
+    .msg-error { color: #ff6b6b; border-left-color: #ff6b6b; background: rgba(255,107,107,0.08); }
+    .msg-loading { color: #fdcb6e; border-left-color: #fdcb6e; background: rgba(253,203,110,0.08); }
+    .msg-info { color: #74b9ff; border-left-color: #74b9ff; background: rgba(116,185,255,0.08); }
 
-    /* ===== التطبيق (المنتدى والدردشة) ===== */
     .top-nav {
       display: flex;
       justify-content: space-between;
@@ -188,14 +163,8 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       padding-bottom: 15px;
     }
-    .top-nav h1 {
-      font-size: 24px;
-      font-weight: 700;
-    }
-    .nav-buttons {
-      display: flex;
-      gap: 8px;
-    }
+    .top-nav h1 { font-size: 24px; font-weight: 700; }
+    .nav-buttons { display: flex; gap: 8px; }
     .nav-buttons button {
       padding: 8px 18px;
       border-radius: 30px;
@@ -206,15 +175,8 @@
       transition: 0.2s;
       font-weight: 600;
     }
-    .nav-buttons button.active-tab {
-      background: #6c5ce7;
-      color: #fff;
-      border-color: #6c5ce7;
-    }
-    .nav-buttons button:hover {
-      background: #6c5ce7;
-      color: #fff;
-    }
+    .nav-buttons button.active-tab { background: #6c5ce7; color: #fff; border-color: #6c5ce7; }
+    .nav-buttons button:hover { background: #6c5ce7; color: #fff; }
     .btn-danger {
       background: #e74c3c;
       color: #fff;
@@ -225,10 +187,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .btn-danger:hover {
-      background: #c0392b;
-      transform: scale(1.03);
-    }
+    .btn-danger:hover { background: #c0392b; transform: scale(1.03); }
 
     .filter-area {
       display: flex;
@@ -246,15 +205,8 @@
       transition: 0.2s;
       font-weight: 500;
     }
-    .filter-btn.active-filter {
-      background: #6c5ce7;
-      color: #fff;
-      border-color: #6c5ce7;
-    }
-    .filter-btn:hover {
-      background: #6c5ce7;
-      color: #fff;
-    }
+    .filter-btn.active-filter { background: #6c5ce7; color: #fff; border-color: #6c5ce7; }
+    .filter-btn:hover { background: #6c5ce7; color: #fff; }
 
     .posts-container {
       max-height: 380px;
@@ -269,9 +221,7 @@
       border-left: 5px solid #6c5ce7;
       transition: 0.2s;
     }
-    .post-item:hover {
-      background: rgba(255, 255, 255, 0.07);
-    }
+    .post-item:hover { background: rgba(255, 255, 255, 0.07); }
     .post-category {
       font-size: 12px;
       color: #a29bfe;
@@ -279,14 +229,8 @@
       letter-spacing: 1px;
       font-weight: 600;
     }
-    .post-item h3 {
-      margin: 6px 0;
-      font-size: 18px;
-    }
-    .post-item small {
-      color: #888;
-      font-size: 13px;
-    }
+    .post-item h3 { margin: 6px 0; font-size: 18px; }
+    .post-item small { color: #888; font-size: 13px; }
 
     .chat-messages {
       height: 340px;
@@ -303,23 +247,13 @@
       border-radius: 14px;
       animation: fadeSlide 0.2s ease;
     }
-    .message-item strong {
-      color: #a29bfe;
-      font-weight: 700;
-    }
-    .message-item .msg-time {
-      float: right;
-      font-size: 11px;
-      color: #666;
-    }
+    .message-item strong { color: #a29bfe; font-weight: 700; }
+    .message-item .msg-time { float: right; font-size: 11px; color: #666; }
     .chat-input-area {
       display: flex;
       gap: 10px;
     }
-    .chat-input-area input {
-      flex: 1;
-      margin: 0;
-    }
+    .chat-input-area input { flex: 1; margin: 0; }
     .chat-input-area button {
       flex: 0 0 auto;
       padding: 14px 28px;
@@ -331,28 +265,12 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .chat-input-area button:hover:not(:disabled) {
-      background: #5a4bd1;
-      transform: scale(1.03);
-    }
-    .chat-input-area button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    ::-webkit-scrollbar {
-      width: 5px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #6c5ce7;
-      border-radius: 10px;
-    }
-    .empty-state {
-      text-align: center;
-      color: #666;
-      padding: 40px 0;
-      font-size: 15px;
-    }
-    /* رسالة منبثقة صغيرة (توست) للدردشة */
+    .chat-input-area button:hover:not(:disabled) { background: #5a4bd1; transform: scale(1.03); }
+    .chat-input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #6c5ce7; border-radius: 10px; }
+    .empty-state { text-align: center; color: #666; padding: 40px 0; font-size: 15px; }
+
     .toast-msg {
       position: fixed;
       bottom: 30px;
@@ -369,10 +287,7 @@
       z-index: 999;
       pointer-events: none;
     }
-    .toast-msg.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -406,7 +321,6 @@
         <input type="password" id="signup-password" placeholder="كلمة المرور (6 أحرف على الأقل)" />
         <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور" />
         <button class="btn-primary-full" id="signup-btn">🚀 إنشاء حساب</button>
-        <!-- نفس مكان الرسالة -->
       </div>
     </div>
   </div>
@@ -447,7 +361,7 @@
   </div>
 </div>
 
-<!-- ===== Toast رسالة صغيرة (تظهر ثم تختفي) ===== -->
+<!-- ===== Toast رسالة صغيرة ===== -->
 <div id="toast" class="toast-msg">✅ تم الإرسال</div>
 
 <!-- ========================================= -->
@@ -480,25 +394,25 @@
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
   // =============================================
-  // 2. المتغيرات الأساسية والعناصر
+  // 2. المتغيرات الأساسية
   // =============================================
+  // ** المتغير السحري: هنا هنخزن اسم المستخدم عشان نستخدمه في الدردشة من غير ما نطلب من قاعدة البيانات كل شوية **
+  let currentDisplayName = 'مجهول';
+
   const authScreen = document.getElementById('auth-screen');
   const appScreen = document.getElementById('app-screen');
   const authMsg = document.getElementById('auth-message');
   const toast = document.getElementById('toast');
 
-  // عناصر الدخول
   const loginEmail = document.getElementById('login-email');
   const loginPass = document.getElementById('login-password');
 
-  // عناصر التسجيل
   const fullName = document.getElementById('full-name');
   const username = document.getElementById('username');
   const signupEmail = document.getElementById('signup-email');
   const signupPass = document.getElementById('signup-password');
   const confirmPass = document.getElementById('confirm-password');
 
-  // عناصر التطبيق
   const postsContainer = document.getElementById('posts-container');
   const chatMessages = document.getElementById('chat-messages');
   const msgInput = document.getElementById('msg-input');
@@ -514,7 +428,7 @@
   let currentCategory = 'all';
 
   // =============================================
-  // 3. دوال عرض الرسائل (بكثافة واحترافية)
+  // 3. دوال الرسائل
   // =============================================
   function setAuthMessage(text, type = 'info') {
     authMsg.textContent = text;
@@ -534,7 +448,7 @@
   }
 
   // =============================================
-  // 4. التحكم في علامات التبويب (دخول / تسجيل)
+  // 4. علامات التبويب (دخول / تسجيل)
   // =============================================
   document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -553,7 +467,7 @@
   });
 
   // =============================================
-  // 5. دوال عرض الشاشات
+  // 5. دوال الشاشات
   // =============================================
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
@@ -590,7 +504,7 @@
   }
 
   // =============================================
-  // 7. جلب منشورات المنتدى
+  // 7. المنتدى
   // =============================================
   function loadForumPosts() {
     let query = db.collection('posts').orderBy('createdAt', 'desc');
@@ -617,7 +531,7 @@
   }
 
   // =============================================
-  // 8. جلب رسائل الدردشة
+  // 8. الدردشة (استماع للرسائل)
   // =============================================
   function loadChatMessages() {
     unsubscribeChat = db.collection('chats').doc('general').collection('messages')
@@ -644,7 +558,7 @@
   }
 
   // =============================================
-  // 9. إرسال رسالة (مع رسالة تأكيد)
+  // 9. إرسال رسالة (الحل الجديد بدون Offline Error)
   // =============================================
   async function sendMessage() {
     const text = msgInput.value.trim();
@@ -655,17 +569,19 @@
     sendBtn.disabled = true;
     sendBtn.textContent = '⏳ جاري...';
     try {
-      const doc = await db.collection('users').doc(user.uid).get();
-      const userData = doc.data();
-      const displayName = userData?.fullName || user.email || 'مجهول';
+      // ** النجدة: بقينا نستخدم المتغير currentDisplayName اللي اتحفظ من ساعة ما دخل **
+      // من غير ما نروح نجيب من قاعدة البيانات تاني (وده كان سبب مشكلة Offline)
+      const displayName = currentDisplayName || user.email || 'مجهول';
+
       await db.collection('chats').doc('general').collection('messages').add({
         text: text,
         sender: displayName,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
       msgInput.value = '';
-      showToast('✅ تم إرسال رسالتك بنجاح!', '#2ecc71');
+      showToast('✅ تم إرسال رسالتك!', '#2ecc71');
     } catch (err) {
+      console.error(err);
       showToast('❌ فشل الإرسال: ' + err.message, '#ff6b6b');
     }
     sendBtn.disabled = false;
@@ -673,26 +589,20 @@
   }
 
   // =============================================
-  // 10. أحداث الدخول وإنشاء الحساب (باستخدام async/await)
+  // 10. أحداث الدخول وإنشاء الحساب
   // =============================================
-
-  // --- تسجيل الدخول ---
   document.getElementById('login-btn').addEventListener('click', async () => {
     const email = loginEmail.value.trim();
     const pass = loginPass.value;
-    if (!email || !pass) {
-      setAuthMessage('❌ من فضلك املأ البريد وكلمة المرور', 'error');
-      return;
-    }
+    if (!email || !pass) { setAuthMessage('❌ من فضلك املأ البريد وكلمة المرور', 'error'); return; }
     const btn = document.getElementById('login-btn');
     btn.disabled = true;
     btn.textContent = '⏳ جاري الدخول...';
-    setAuthMessage('⏳ جاري التحقق من البيانات...', 'loading');
+    setAuthMessage('⏳ جاري التحقق...', 'loading');
     try {
       await auth.signInWithEmailAndPassword(email, pass);
-      setAuthMessage('✅ تم تسجيل الدخول بنجاح! مرحباً بك 🎉', 'success');
+      setAuthMessage('✅ تم تسجيل الدخول بنجاح! 🎉', 'success');
       showToast('🎉 مرحباً بعودتك!', '#2ecc71');
-      // هنفضل نستنى الـ onAuthStateChanged يحولنا للتطبيق
     } catch (err) {
       let msg = '❌ فشل الدخول: ';
       if (err.code === 'auth/user-not-found') msg += 'المستخدم غير موجود';
@@ -706,7 +616,6 @@
     btn.textContent = 'دخول';
   });
 
-  // --- إنشاء حساب جديد ---
   document.getElementById('signup-btn').addEventListener('click', async () => {
     const name = fullName.value.trim();
     const user = username.value.trim();
@@ -718,14 +627,8 @@
       setAuthMessage('❌ كل الحقول مطلوبة', 'error');
       return;
     }
-    if (pass.length < 6) {
-      setAuthMessage('❌ كلمة المرور لازم تكون 6 أحرف على الأقل', 'error');
-      return;
-    }
-    if (pass !== confirm) {
-      setAuthMessage('❌ كلمة المرور غير متطابقة مع التأكيد', 'error');
-      return;
-    }
+    if (pass.length < 6) { setAuthMessage('❌ كلمة المرور لازم 6 أحرف', 'error'); return; }
+    if (pass !== confirm) { setAuthMessage('❌ كلمة المرور غير متطابقة', 'error'); return; }
 
     const btn = document.getElementById('signup-btn');
     btn.disabled = true;
@@ -733,18 +636,15 @@
     setAuthMessage('⏳ جاري إنشاء الحساب...', 'loading');
 
     try {
-      // الخطوة 1: إنشاء في Auth
       const cred = await auth.createUserWithEmailAndPassword(email, pass);
-      // الخطوة 2: حفظ البيانات في Firestore
       await db.collection('users').doc(cred.user.uid).set({
         fullName: name,
         username: user,
         email: email,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      setAuthMessage('✅ تم إنشاء الحساب بنجاح! جاري توجيهك...', 'success');
-      showToast('🎉 حسابك اشتغل! مرحباً بيك', '#2ecc71');
-      // نفضي الحقول (شكلياً)
+      setAuthMessage('✅ تم إنشاء الحساب بنجاح! 🎉', 'success');
+      showToast('🎉 حسابك اشتغل!', '#2ecc71');
       fullName.value = '';
       username.value = '';
       signupEmail.value = '';
@@ -752,9 +652,9 @@
       confirmPass.value = '';
     } catch (err) {
       let msg = '❌ فشل الإنشاء: ';
-      if (err.code === 'auth/email-already-in-use') msg += 'الإيميل ده مستخدم قبل كده';
+      if (err.code === 'auth/email-already-in-use') msg += 'الإيميل مستخدم قبل كده';
       else if (err.code === 'auth/invalid-email') msg += 'الإيميل مش صحيح';
-      else if (err.code === 'auth/weak-password') msg += 'كلمة المرور ضعيفة جداً';
+      else if (err.code === 'auth/weak-password') msg += 'كلمة المرور ضعيفة';
       else msg += err.message;
       setAuthMessage(msg, 'error');
       showToast(msg, '#ff6b6b');
@@ -790,10 +690,24 @@
   });
 
   // =============================================
-  // 12. مراقبة حالة المستخدم (الجلسة)
+  // 12. مراقبة حالة المستخدم (الأهم)
   // =============================================
   auth.onAuthStateChanged(user => {
     if (user) {
+      // ** الخطوة السحرية: هنا بنجيب اسم المستخدم مرة واحدة بس ونخزنه في المتغير **
+      db.collection('users').doc(user.uid).get()
+        .then(doc => {
+          if (doc.exists) {
+            currentDisplayName = doc.data().fullName || user.email || 'مجهول';
+          } else {
+            currentDisplayName = user.email || 'مجهول';
+          }
+          console.log('✅ تم تحميل اسم المستخدم:', currentDisplayName);
+        })
+        .catch(() => {
+          currentDisplayName = user.email || 'مجهول';
+        });
+
       showApp();
       if (!unsubscribeForum && forumView.style.display !== 'none') loadForumPosts();
     } else {
@@ -802,12 +716,12 @@
       if (unsubscribeChat) { unsubscribeChat();
         unsubscribeChat = null; }
       showAuth();
-      // نرجع التاب الافتراضي للدخول
       document.querySelector('.auth-tab[data-tab="login"]').click();
+      currentDisplayName = 'مجهول'; // نفضي الاسم عند الخروج
     }
   });
 
-  // ضغط Enter في أي حقل يشغل الزر المناسب
+  // ضغط Enter
   document.querySelectorAll('#form-login input, #form-signup input').forEach(inp => {
     inp.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
@@ -820,7 +734,6 @@
     });
   });
 
-  // رسالة ترحيب عند التحميل
   setAuthMessage('👈 اختر طريقة الدخول', 'info');
 </script>
 </body>
