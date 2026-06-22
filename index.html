@@ -232,6 +232,26 @@
     .post-item h3 { margin: 6px 0; font-size: 18px; }
     .post-item small { color: #888; font-size: 13px; }
 
+    .chat-header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .chat-header-actions h3 { margin: 0; }
+    .refresh-btn {
+      background: #6c5ce7;
+      border: none;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+    .refresh-btn:hover { background: #5a4bd1; transform: scale(1.05); }
+
     .chat-messages {
       height: 340px;
       overflow-y: auto;
@@ -338,6 +358,7 @@
       </div>
     </div>
 
+    <!-- المنتدى -->
     <div id="forum-view">
       <div class="filter-area">
         <button class="filter-btn active-filter" data-cat="all">الكل</button>
@@ -349,7 +370,12 @@
       </div>
     </div>
 
+    <!-- الدردشة (مع زرار التحديث) -->
     <div id="chat-view" style="display:none;">
+      <div class="chat-header-actions">
+        <h3>💬 غرفة الدردشة</h3>
+        <button class="refresh-btn" id="refresh-chat-btn">🔄 تحديث</button>
+      </div>
       <div id="chat-messages" class="chat-messages">
         <div class="empty-state">💬 إبدأ المحادثة...</div>
       </div>
@@ -361,7 +387,7 @@
   </div>
 </div>
 
-<!-- ===== Toast رسالة صغيرة ===== -->
+<!-- ===== Toast رسالة ===== -->
 <div id="toast" class="toast-msg">✅ تم الإرسال</div>
 
 <!-- ========================================= -->
@@ -376,7 +402,7 @@
 
 <script>
   // =============================================
-  // 1. تهيئة Firebase + بقاء الجلسة
+  // 1. تهيئة Firebase (حط بياناتك هنا)
   // =============================================
   const firebaseConfig = {
     apiKey: "AIzaSyB_m5BK4zckEwX6B41bSkl2CXizZjxBC8Y",
@@ -394,10 +420,9 @@
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
   // =============================================
-  // 2. المتغيرات الأساسية
+  // 2. المتغيرات الأساسية (الحل السحري للـ Offline)
   // =============================================
-  // ** المتغير السحري: هنا هنخزن اسم المستخدم عشان نستخدمه في الدردشة من غير ما نطلب من قاعدة البيانات كل شوية **
-  let currentDisplayName = 'مجهول';
+  let currentDisplayName = 'مجهول'; // بنخزن فيه اسم المستخدم عشان نستخدمه في الدردشة من غير ما نطلب من قاعدة البيانات كل شوية
 
   const authScreen = document.getElementById('auth-screen');
   const appScreen = document.getElementById('app-screen');
@@ -444,7 +469,7 @@
     toast.style.background = color;
     toast.classList.add('show');
     clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
   }
 
   // =============================================
@@ -504,7 +529,7 @@
   }
 
   // =============================================
-  // 7. المنتدى
+  // 7. المنتدى (قراءة منشورات)
   // =============================================
   function loadForumPosts() {
     let query = db.collection('posts').orderBy('createdAt', 'desc');
@@ -531,12 +556,18 @@
   }
 
   // =============================================
-  // 8. الدردشة (استماع للرسائل)
+  // 8. الدردشة (الحل النهائي لمشكلة عدم الظهور عند التانيين)
   // =============================================
   function loadChatMessages() {
+    // ** هنا الحل السحري: source: 'server' بيجبره يروح للسيرفر وميستخدمش الكاش **
+    const options = {
+      includeMetadataChanges: true,
+      source: 'server'
+    };
+
     unsubscribeChat = db.collection('chats').doc('general').collection('messages')
       .orderBy('timestamp', 'asc')
-      .onSnapshot((snapshot) => {
+      .onSnapshot(options, (snapshot) => {
         if (snapshot.empty) {
           chatMessages.innerHTML = '<div class="empty-state">💬 مفيش رسائل، إبدأ أنت</div>';
           return;
@@ -554,11 +585,14 @@
           chatMessages.appendChild(div);
         });
         chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, (error) => {
+        console.error("🔥 خطأ في جلب الرسائل:", error);
+        chatMessages.innerHTML = '<div class="empty-state">⚠️ مشكلة في الاتصال بالخادم</div>';
       });
   }
 
   // =============================================
-  // 9. إرسال رسالة (الحل الجديد بدون Offline Error)
+  // 9. إرسال رسالة (من غير أي طلبات إضافية للـ Firestore)
   // =============================================
   async function sendMessage() {
     const text = msgInput.value.trim();
@@ -569,8 +603,7 @@
     sendBtn.disabled = true;
     sendBtn.textContent = '⏳ جاري...';
     try {
-      // ** النجدة: بقينا نستخدم المتغير currentDisplayName اللي اتحفظ من ساعة ما دخل **
-      // من غير ما نروح نجيب من قاعدة البيانات تاني (وده كان سبب مشكلة Offline)
+      // ** بنستخدم المتغير المحفوظ عشان منطلبش من قاعدة البيانات حاجة **
       const displayName = currentDisplayName || user.email || 'مجهول';
 
       await db.collection('chats').doc('general').collection('messages').add({
@@ -681,6 +714,17 @@
     });
   });
 
+  // زرار تحديث الدردشة (حل إضافي لو حصل أي لبس)
+  document.getElementById('refresh-chat-btn')?.addEventListener('click', () => {
+    if (unsubscribeChat) {
+      unsubscribeChat();
+      unsubscribeChat = null;
+    }
+    chatMessages.innerHTML = '<div class="empty-state">⏳ جاري التحديث من السيرفر...</div>';
+    loadChatMessages();
+    showToast('🔄 تم تحديث الدردشة', '#6c5ce7');
+  });
+
   sendBtn.addEventListener('click', sendMessage);
   msgInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
@@ -694,7 +738,7 @@
   // =============================================
   auth.onAuthStateChanged(user => {
     if (user) {
-      // ** الخطوة السحرية: هنا بنجيب اسم المستخدم مرة واحدة بس ونخزنه في المتغير **
+      // ** بنجيب اسم المستخدم مرة واحدة بس ونخزنه في المتغير عشان نستخدمه في الدردشة **
       db.collection('users').doc(user.uid).get()
         .then(doc => {
           if (doc.exists) {
@@ -711,17 +755,18 @@
       showApp();
       if (!unsubscribeForum && forumView.style.display !== 'none') loadForumPosts();
     } else {
+      // إلغاء الاستماع عند الخروج
       if (unsubscribeForum) { unsubscribeForum();
         unsubscribeForum = null; }
       if (unsubscribeChat) { unsubscribeChat();
         unsubscribeChat = null; }
       showAuth();
       document.querySelector('.auth-tab[data-tab="login"]').click();
-      currentDisplayName = 'مجهول'; // نفضي الاسم عند الخروج
+      currentDisplayName = 'مجهول';
     }
   });
 
-  // ضغط Enter
+  // دخول بالضغط على Enter
   document.querySelectorAll('#form-login input, #form-signup input').forEach(inp => {
     inp.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
