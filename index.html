@@ -1,785 +1,890 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>منتدى ودردشة احترافي</title>
+  <title>منتدى الكورة والروايات - النسخة المتطورة</title>
   <style>
-    /* ========== الأنماط الأساسية ========== */
+    /* ============================================================
+       1. المتغيرات العامة (الثيم الأساسي + الدارك مود)
+       ============================================================ */
+    :root {
+      --bg-body: #f0f2f5;
+      --bg-app: #ffffff;
+      --bg-header: linear-gradient(135deg, #1e3c72, #2a5298);
+      --text-primary: #1c1e21;
+      --text-secondary: #65676b;
+      --bg-card: #ffffff;
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-color: #e4e6eb;
+      --input-bg: #f7f8fa;
+      --accent-blue: #1877f2;
+      --accent-hover: #0d65d9;
+      --category-football: #e74c3c;
+      --category-novels: #8e44ad;
+      --like-color: #1877f2;
+      --transition-speed: 0.3s;
+    }
+
+    /* ثيم الدارك مود */
+    body.dark-mode {
+      --bg-body: #18191a;
+      --bg-app: #242526;
+      --bg-header: linear-gradient(135deg, #0b1a30, #1a2a4a);
+      --text-primary: #e4e6eb;
+      --text-secondary: #b0b3b8;
+      --bg-card: #3a3b3c;
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
+      --border-color: #4e4f50;
+      --input-bg: #3a3b3c;
+      --accent-blue: #2d88ff;
+    }
+
+    /* ============================================================
+       2. التنسيقات العامة
+       ============================================================ */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
+
     body {
-      background: linear-gradient(135deg, #0f0f1a, #1e1e2f);
-      min-height: 100vh;
+      background: var(--bg-body);
       display: flex;
       justify-content: center;
-      align-items: center;
       padding: 20px;
-    }
-    .app-wrapper {
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      padding: 30px 25px;
-      width: 100%;
-      max-width: 780px;
-      min-height: 580px;
-      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
-      color: #fff;
-      transition: 0.3s;
-      position: relative;
-    }
-    .screen {
-      display: none;
-      animation: fadeSlide 0.4s ease;
-    }
-    .screen.active {
-      display: block;
-    }
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      min-height: 100vh;
+      transition: background var(--transition-speed);
     }
 
-    .auth-container h1 {
-      font-size: 30px;
-      font-weight: 700;
-      text-align: center;
-      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+    #app {
+      max-width: 720px;
+      width: 100%;
+      background: var(--bg-app);
+      border-radius: 28px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      padding: 24px;
+      min-height: 90vh;
+      transition: background var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    /* ============================================================
+       3. شاشة تسجيل الدخول (محسنة)
+       ============================================================ */
+    .auth-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 75vh;
+      gap: 12px;
+    }
+
+    .auth-screen .logo {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: var(--bg-header);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-    .auth-tabs {
-      display: flex;
-      gap: 10px;
-      margin: 25px 0 20px;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 6px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .auth-tab {
-      flex: 1;
-      text-align: center;
-      padding: 12px 0;
-      border-radius: 14px;
-      background: transparent;
-      color: #aaa;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      border: none;
-      font-size: 15px;
-    }
-    .auth-tab.active-tab-auth {
-      background: #6c5ce7;
-      color: #fff;
-      box-shadow: 0 6px 20px rgba(108, 92, 231, 0.35);
-    }
-    .auth-tab:hover {
-      color: #fff;
-    }
-    .auth-form-group {
-      display: none;
-      animation: fadeSlide 0.3s ease;
-    }
-    .auth-form-group.active-form {
-      display: block;
+      background-clip: text;
+      margin-bottom: 10px;
     }
 
-    input {
+    .auth-screen h3 {
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-bottom: 15px;
+    }
+
+    .auth-screen input {
       width: 100%;
-      padding: 14px 18px;
-      margin: 10px 0;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1.5px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      color: #fff;
-      font-size: 15px;
+      max-width: 320px;
+      padding: 14px 20px;
+      margin: 5px 0;
+      border: 2px solid var(--border-color);
+      border-radius: 40px;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      transition: 0.2s;
       outline: none;
-      transition: 0.25s;
     }
-    input:focus {
-      border-color: #6c5ce7;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+
+    .auth-screen input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
     }
-    input::placeholder {
-      color: #777;
-    }
-    .btn-primary-full {
-      background: linear-gradient(135deg, #6c5ce7, #5a4bd1);
-      color: #fff;
+
+    .auth-screen button {
       width: 100%;
-      padding: 15px;
+      max-width: 320px;
+      padding: 14px;
+      margin: 5px 0;
       border: none;
-      border-radius: 16px;
+      border-radius: 40px;
+      background: var(--accent-blue);
+      color: white;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: 0.25s;
-      margin-top: 12px;
-      letter-spacing: 0.5px;
-      position: relative;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
     }
-    .btn-primary-full:hover:not(:disabled) {
+
+    .auth-screen button:hover {
+      background: var(--accent-hover);
       transform: scale(1.02);
-      box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
-    }
-    .btn-primary-full:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: scale(0.98);
+      box-shadow: 0 6px 15px rgba(24, 119, 242, 0.4);
     }
 
-    #auth-message {
-      margin-top: 18px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      font-size: 14px;
-      text-align: center;
-      min-height: 20px;
-      background: rgba(0, 0, 0, 0.2);
-      border-left: 4px solid transparent;
-      transition: 0.3s;
+    .auth-screen .switch-link {
+      color: var(--accent-blue);
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: 0.2s;
     }
-    .msg-success { color: #2ecc71; border-left-color: #2ecc71; background: rgba(46,204,113,0.08); }
-    .msg-error { color: #ff6b6b; border-left-color: #ff6b6b; background: rgba(255,107,107,0.08); }
-    .msg-loading { color: #fdcb6e; border-left-color: #fdcb6e; background: rgba(253,203,110,0.08); }
-    .msg-info { color: #74b9ff; border-left-color: #74b9ff; background: rgba(116,185,255,0.08); }
+    .auth-screen .switch-link:hover {
+      text-decoration: underline;
+      transform: scale(1.02);
+    }
 
-    .top-nav {
+    /* ============================================================
+       4. الهيدر + زر الدارك مود
+       ============================================================ */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 25px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding-bottom: 15px;
-    }
-    .top-nav h1 { font-size: 24px; font-weight: 700; }
-    .nav-buttons { display: flex; gap: 8px; }
-    .nav-buttons button {
-      padding: 8px 18px;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.04);
-      color: #aaa;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: 0.2s;
-      font-weight: 600;
-    }
-    .nav-buttons button.active-tab { background: #6c5ce7; color: #fff; border-color: #6c5ce7; }
-    .nav-buttons button:hover { background: #6c5ce7; color: #fff; }
-    .btn-danger {
-      background: #e74c3c;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-danger:hover { background: #c0392b; transform: scale(1.03); }
-
-    .filter-area {
-      display: flex;
-      gap: 10px;
+      padding: 0 0 16px 0;
+      border-bottom: 2px solid var(--border-color);
       margin-bottom: 20px;
       flex-wrap: wrap;
+      gap: 10px;
     }
-    .filter-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 20px;
-      border-radius: 30px;
-      color: #aaa;
+
+    .header .brand {
+      font-size: 1.9rem;
+      font-weight: 800;
+      background: var(--bg-header);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header .user-info .username-badge {
+      background: var(--input-bg);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .header .user-info .icon-btn {
+      background: var(--input-bg);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header .user-info .icon-btn:hover {
+      background: var(--border-color);
+      transform: rotate(10deg) scale(1.05);
+    }
+
+    .header .user-info .logout-btn {
+      background: #e74c3c;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      color: white;
+      font-weight: 600;
       cursor: pointer;
       transition: 0.2s;
-      font-weight: 500;
+      font-size: 0.85rem;
     }
-    .filter-btn.active-filter { background: #6c5ce7; color: #fff; border-color: #6c5ce7; }
-    .filter-btn:hover { background: #6c5ce7; color: #fff; }
+    .header .user-info .logout-btn:hover {
+      background: #c0392b;
+      transform: scale(0.95);
+    }
 
-    .posts-container {
-      max-height: 380px;
-      overflow-y: auto;
-      padding-right: 5px;
+    /* ============================================================
+       5. التبويبات (Tabs) المحسنة
+       ============================================================ */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
     }
-    .post-item {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 16px 18px;
-      margin-bottom: 14px;
-      border-radius: 16px;
-      border-left: 5px solid #6c5ce7;
-      transition: 0.2s;
-    }
-    .post-item:hover { background: rgba(255, 255, 255, 0.07); }
-    .post-category {
-      font-size: 12px;
-      color: #a29bfe;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-    .post-item h3 { margin: 6px 0; font-size: 18px; }
-    .post-item small { color: #888; font-size: 13px; }
 
-    .chat-header-actions {
+    .tabs button {
+      flex: 1;
+      padding: 12px 6px;
+      border: none;
+      border-radius: 40px;
+      background: var(--input-bg);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .tabs button .badge-count {
+      background: var(--border-color);
+      padding: 0px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      color: var(--text-primary);
+      margin-right: 5px;
+    }
+
+    .tabs button.active {
+      background: var(--accent-blue);
+      color: white;
+      box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+      border-color: var(--accent-blue);
+    }
+
+    .tabs button.active .badge-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    .tabs button:hover:not(.active) {
+      background: var(--border-color);
+      transform: translateY(-2px);
+    }
+
+    /* ============================================================
+       6. نموذج إضافة البوست (محسن)
+       ============================================================ */
+    .add-post {
+      background: var(--input-bg);
+      padding: 18px;
+      border-radius: 24px;
+      margin-bottom: 25px;
+      border: 1px solid var(--border-color);
+      transition: 0.3s;
+    }
+
+    .add-post input,
+    .add-post textarea,
+    .add-post select {
+      width: 100%;
+      padding: 12px 18px;
+      margin: 6px 0;
+      border: 2px solid transparent;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      background: var(--bg-app);
+      color: var(--text-primary);
+      transition: 0.25s;
+      outline: none;
+    }
+
+    .add-post input:focus,
+    .add-post textarea:focus,
+    .add-post select:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+    }
+
+    .add-post textarea {
+      border-radius: 20px;
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .add-post select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .add-post .submit-post-btn {
+      background: linear-gradient(135deg, #1877f2, #0d65d9);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: all 0.25s;
+      box-shadow: 0 4px 10px rgba(24, 119, 242, 0.25);
+    }
+
+    .add-post .submit-post-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 18px rgba(24, 119, 242, 0.35);
+    }
+
+    /* ============================================================
+       7. بطاقات البوستات (Card) - تحفة
+       ============================================================ */
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px) scale(1.005);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .post-card .post-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
-    .chat-header-actions h3 { margin: 0; }
-    .refresh-btn {
-      background: #6c5ce7;
-      border: none;
-      color: #fff;
-      padding: 6px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      transition: 0.2s;
-    }
-    .refresh-btn:hover { background: #5a4bd1; transform: scale(1.05); }
 
-    .chat-messages {
-      height: 340px;
-      overflow-y: auto;
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 16px;
+    .post-card .post-header .author {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .message-item {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      border-radius: 14px;
-      animation: fadeSlide 0.2s ease;
+
+    .post-card .post-header .author .avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--accent-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
     }
-    .message-item strong { color: #a29bfe; font-weight: 700; }
-    .message-item .msg-time { float: right; font-size: 11px; color: #666; }
-    .chat-input-area {
+
+    .post-card .post-header .category-tag {
+      padding: 5px 16px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .category-tag.football {
+      background: var(--category-football);
+    }
+    .category-tag.novels {
+      background: var(--category-novels);
+    }
+
+    .post-card .post-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 8px 0 4px;
+    }
+
+    .post-card .post-content {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 6px 0 14px;
+      line-height: 1.6;
+    }
+
+    /* أزرار التفاعل (لايك - كومنت) */
+    .post-card .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+      margin-top: 6px;
+    }
+
+    .post-card .post-actions .like-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 40px;
+      transition: all 0.2s;
+    }
+
+    .post-card .post-actions .like-btn:hover {
+      background: var(--input-bg);
+    }
+
+    .post-card .post-actions .like-btn.liked {
+      color: var(--like-color);
+    }
+
+    .post-card .post-actions .like-btn.liked span {
+      color: var(--like-color);
+    }
+
+    /* تأثير النفخة عند الضغط على اللايك (يتم تشغيله عبر JS) */
+    @keyframes likePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.6); }
+      100% { transform: scale(1); }
+    }
+    .post-card .post-actions .like-btn.pop {
+      animation: likePop 0.35s ease;
+    }
+
+    /* ============================================================
+       8. التعليقات (فقاعات دردشة)
+       ============================================================ */
+    .post-card .comments-section {
+      margin-top: 16px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+    }
+
+    .post-card .comments-section .comment-bubble {
+      background: var(--input-bg);
+      padding: 10px 16px;
+      border-radius: 18px 18px 18px 4px;
+      margin: 6px 0 10px;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      max-width: 90%;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .post-card .comments-section .comment-bubble strong {
+      color: var(--accent-blue);
+      font-weight: 700;
+      display: inline-block;
+      margin-left: 6px;
+    }
+
+    .post-card .comments-section .add-comment {
       display: flex;
       gap: 10px;
+      margin-top: 12px;
+      align-items: center;
     }
-    .chat-input-area input { flex: 1; margin: 0; }
-    .chat-input-area button {
-      flex: 0 0 auto;
-      padding: 14px 28px;
-      background: #6c5ce7;
-      color: #fff;
-      border-radius: 16px;
+
+    .post-card .comments-section .add-comment input {
+      flex: 1;
+      padding: 10px 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 40px;
+      font-size: 0.9rem;
+      background: var(--bg-app);
+      color: var(--text-primary);
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .post-card .comments-section .add-comment input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .post-card .comments-section .add-comment button {
+      background: var(--accent-blue);
+      color: white;
       border: none;
+      padding: 10px 22px;
+      border-radius: 40px;
       font-weight: 700;
       cursor: pointer;
       transition: 0.2s;
+      white-space: nowrap;
     }
-    .chat-input-area button:hover:not(:disabled) { background: #5a4bd1; transform: scale(1.03); }
-    .chat-input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-thumb { background: #6c5ce7; border-radius: 10px; }
-    .empty-state { text-align: center; color: #666; padding: 40px 0; font-size: 15px; }
 
-    .toast-msg {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2ecc71;
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 60px;
-      font-weight: 600;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transition: 0.4s;
-      z-index: 999;
-      pointer-events: none;
+    .post-card .comments-section .add-comment button:hover {
+      background: var(--accent-hover);
+      transform: scale(0.95);
     }
-    .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ============================================================
+       9. رسائل وخلاصة
+       ============================================================ */
+    .msg {
+      background: var(--input-bg);
+      padding: 16px;
+      border-radius: 40px;
+      text-align: center;
+      color: var(--text-secondary);
+      border: 1px dashed var(--border-color);
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       10. تحسينات إضافية (سكرول ومسافات)
+       ============================================================ */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-body);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-blue);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 500px) {
+      #app { padding: 16px; }
+      .header .brand { font-size: 1.4rem; }
+      .post-card { padding: 14px; }
+    }
   </style>
 </head>
 <body>
-
-<div class="app-wrapper">
-
-  <!-- ========================================= -->
-  <!-- شاشة المصادقة (دخول / حساب جديد) -->
-  <!-- ========================================= -->
-  <div id="auth-screen" class="screen active">
-    <div class="auth-container">
-      <h1>✨ أهلاً بك</h1>
-      <div class="auth-tabs">
-        <button class="auth-tab active-tab-auth" data-tab="login">🔑 تسجيل دخول</button>
-        <button class="auth-tab" data-tab="signup">🚀 حساب جديد</button>
-      </div>
-
-      <!-- نموذج الدخول -->
-      <div id="form-login" class="auth-form-group active-form">
-        <input type="email" id="login-email" placeholder="البريد الإلكتروني" />
-        <input type="password" id="login-password" placeholder="كلمة المرور" />
-        <button class="btn-primary-full" id="login-btn">دخول</button>
-        <div id="auth-message">👈 اختر طريقة الدخول</div>
-      </div>
-
-      <!-- نموذج إنشاء حساب -->
-      <div id="form-signup" class="auth-form-group">
-        <input type="text" id="full-name" placeholder="الاسم الكامل (مثال: أحمد محمد)" />
-        <input type="text" id="username" placeholder="اسم المستخدم (مثال: ahmed_123)" />
-        <input type="email" id="signup-email" placeholder="البريد الإلكتروني" />
-        <input type="password" id="signup-password" placeholder="كلمة المرور (6 أحرف على الأقل)" />
-        <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور" />
-        <button class="btn-primary-full" id="signup-btn">🚀 إنشاء حساب</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================= -->
-  <!-- شاشة التطبيق (المنتدى + الدردشة) -->
-  <!-- ========================================= -->
-  <div id="app-screen" class="screen">
-    <div class="top-nav">
-      <h1 id="app-title">📰 المنتدى</h1>
-      <div class="nav-buttons">
-        <button id="nav-forum" class="active-tab">📰 المنتدى</button>
-        <button id="nav-chat">💬 الدردشة</button>
-        <button class="btn-danger" id="logout-btn">خروج</button>
-      </div>
-    </div>
-
-    <!-- المنتدى -->
-    <div id="forum-view">
-      <div class="filter-area">
-        <button class="filter-btn active-filter" data-cat="all">الكل</button>
-        <button class="filter-btn" data-cat="كورة">⚽ كورة</button>
-        <button class="filter-btn" data-cat="قصص">📖 قصص</button>
-      </div>
-      <div id="posts-container" class="posts-container">
-        <div class="empty-state">⏳ جاري تحميل المنشورات...</div>
-      </div>
-    </div>
-
-    <!-- الدردشة (مع زرار التحديث) -->
-    <div id="chat-view" style="display:none;">
-      <div class="chat-header-actions">
-        <h3>💬 غرفة الدردشة</h3>
-        <button class="refresh-btn" id="refresh-chat-btn">🔄 تحديث</button>
-      </div>
-      <div id="chat-messages" class="chat-messages">
-        <div class="empty-state">💬 إبدأ المحادثة...</div>
-      </div>
-      <div class="chat-input-area">
-        <input type="text" id="msg-input" placeholder="اكتب رسالتك..." />
-        <button id="send-btn">إرسال</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== Toast رسالة ===== -->
-<div id="toast" class="toast-msg">✅ تم الإرسال</div>
-
-<!-- ========================================= -->
-<!-- Firebase SDK -->
-<!-- ========================================= -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js">
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js">
-</script>
+<div id="app"></div>
 
 <script>
-  // =============================================
-  // 1. تهيئة Firebase (حط بياناتك هنا)
-  // =============================================
-  const firebaseConfig = {
-    apiKey: "AIzaSyB_m5BK4zckEwX6B41bSkl2CXizZjxBC8Y",
-    authDomain: "hassan-montade.firebaseapp.com",
-    projectId: "hassan-montade",
-    storageBucket: "hassan-montade.firebasestorage.app",
-    messagingSenderId: "112151037802",
-    appId: "1:112151037802:web:db597fc13528cb5d954713",
-    measurementId: "G-XRFR7916DR"
+  // ============================================================
+  //  البيانات و الـ LocalStorage (نفس الكود السابق لكن محسّن)
+  // ============================================================
+  const STORAGE_KEYS = {
+    users: 'forum_users',
+    posts: 'forum_posts',
+    currentUser: 'forum_currentUser',
+    theme: 'forum_theme'
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+  function getData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+  function setData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+  function getCurrentUser() { const u = localStorage.getItem(STORAGE_KEYS.currentUser); return u ? JSON.parse(u) : null; }
+  function setCurrentUser(user) { user ? localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user)) : localStorage.removeItem(STORAGE_KEYS.currentUser); }
 
-  // =============================================
-  // 2. المتغيرات الأساسية (الحل السحري للـ Offline)
-  // =============================================
-  let currentDisplayName = 'مجهول'; // بنخزن فيه اسم المستخدم عشان نستخدمه في الدردشة من غير ما نطلب من قاعدة البيانات كل شوية
-
-  const authScreen = document.getElementById('auth-screen');
-  const appScreen = document.getElementById('app-screen');
-  const authMsg = document.getElementById('auth-message');
-  const toast = document.getElementById('toast');
-
-  const loginEmail = document.getElementById('login-email');
-  const loginPass = document.getElementById('login-password');
-
-  const fullName = document.getElementById('full-name');
-  const username = document.getElementById('username');
-  const signupEmail = document.getElementById('signup-email');
-  const signupPass = document.getElementById('signup-password');
-  const confirmPass = document.getElementById('confirm-password');
-
-  const postsContainer = document.getElementById('posts-container');
-  const chatMessages = document.getElementById('chat-messages');
-  const msgInput = document.getElementById('msg-input');
-  const sendBtn = document.getElementById('send-btn');
-  const navForum = document.getElementById('nav-forum');
-  const navChat = document.getElementById('nav-chat');
-  const forumView = document.getElementById('forum-view');
-  const chatView = document.getElementById('chat-view');
-  const appTitle = document.getElementById('app-title');
-
-  let unsubscribeForum = null;
-  let unsubscribeChat = null;
-  let currentCategory = 'all';
-
-  // =============================================
-  // 3. دوال الرسائل
-  // =============================================
-  function setAuthMessage(text, type = 'info') {
-    authMsg.textContent = text;
-    authMsg.className = '';
-    if (type === 'success') authMsg.classList.add('msg-success');
-    else if (type === 'error') authMsg.classList.add('msg-error');
-    else if (type === 'loading') authMsg.classList.add('msg-loading');
-    else authMsg.classList.add('msg-info');
+  // دالة لجلب عدد البوستات حسب التصنيف
+  function getCategoryCount(category) {
+    const posts = getData(STORAGE_KEYS.posts);
+    if (category === 'all') return posts.length;
+    return posts.filter(p => p.category === category).length;
   }
 
-  function showToast(text, color = '#2ecc71') {
-    toast.textContent = text;
-    toast.style.background = color;
-    toast.classList.add('show');
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
+  // تهيئة البيانات الافتراضية
+  function initDefaultData() {
+    if (!localStorage.getItem(STORAGE_KEYS.users)) {
+      setData(STORAGE_KEYS.users, [
+        { id: '1', username: 'أحمد', email: 'ahmed@test.com', password: '123' },
+        { id: '2', username: 'سارة', email: 'sara@test.com', password: '123' }
+      ]);
+      setData(STORAGE_KEYS.posts, [
+        {
+          id: 'p1', title: 'أفضل مباراة في تاريخ الكورة', content: 'برأيكم مين الفريق اللي لعب أحسن مباراة في التاريخ؟ أنا شايف إن نهائي 2005 كان تحفة.',
+          category: 'football', authorId: '1', authorName: 'أحمد', likes: ['2'],
+          comments: [{ id: 'c1', userId: '2', userName: 'سارة', text: 'أنا معاك، لكن نهائي 2022 كان ملحمة!' }],
+          createdAt: Date.now() - 3600000
+        },
+        {
+          id: 'p2', title: 'رواية "ألف شمس ساطعة"', content: 'هل قرأتم رواية خالد حسيني؟ تستحق القراءة بجد، بتعكس واقع المرأة الأفغانية.',
+          category: 'novels', authorId: '2', authorName: 'سارة', likes: [],
+          comments: [{ id: 'c2', userId: '1', userName: 'أحمد', text: 'أنا قرأتها، مؤثرة جدًا.' }],
+          createdAt: Date.now() - 7200000
+        }
+      ]);
+    }
+  }
+  initDefaultData();
+
+  // دوال العمليات
+  function getUsers() { return getData(STORAGE_KEYS.users); }
+  function setUsers(users) { setData(STORAGE_KEYS.users, users); }
+  function getPosts() { return getData(STORAGE_KEYS.posts); }
+  function setPosts(posts) { setData(STORAGE_KEYS.posts, posts); }
+
+  function registerUser(username, email, password) {
+    const users = getUsers();
+    if (users.find(u => u.email === email)) return { error: 'البريد الإلكتروني مستخدم بالفعل' };
+    const newUser = { id: Date.now().toString(), username, email, password };
+    users.push(newUser);
+    setUsers(users);
+    const { password: _, ...safe } = newUser;
+    return { user: safe };
   }
 
-  // =============================================
-  // 4. علامات التبويب (دخول / تسجيل)
-  // =============================================
-  document.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active-tab-auth'));
-      tab.classList.add('active-tab-auth');
-      const target = tab.dataset.tab;
-      document.querySelectorAll('.auth-form-group').forEach(f => f.classList.remove('active-form'));
-      if (target === 'login') {
-        document.getElementById('form-login').classList.add('active-form');
-        setAuthMessage('🔑 أدخل بياناتك للدخول', 'info');
+  function loginUser(email, password) {
+    const users = getUsers();
+    const user = users.find(u => u.email === email && u.password === password);
+    if (!user) return { error: 'البريد أو كلمة المرور غير صحيحة' };
+    const { password: _, ...safe } = user;
+    return { user: safe };
+  }
+
+  function addPost(title, content, category, authorId, authorName) {
+    const posts = getPosts();
+    const newPost = { id: 'p' + Date.now(), title, content, category, authorId, authorName, likes: [], comments: [], createdAt: Date.now() };
+    posts.unshift(newPost);
+    setPosts(posts);
+    return newPost;
+  }
+
+  function toggleLike(postId, userId) {
+    const posts = getPosts();
+    const post = posts.find(p => p.id === postId);
+    if (!post) return null;
+    const idx = post.likes.indexOf(userId);
+    if (idx === -1) post.likes.push(userId);
+    else post.likes.splice(idx, 1);
+    setPosts(posts);
+    return post;
+  }
+
+  function addComment(postId, userId, userName, text) {
+    const posts = getPosts();
+    const post = posts.find(p => p.id === postId);
+    if (!post) return null;
+    post.comments.push({ id: 'c' + Date.now(), userId, userName, text });
+    setPosts(posts);
+    return post;
+  }
+
+  // ============================================================
+  //  الواجهة الرئيسية (UI)
+  // ============================================================
+  const app = document.getElementById('app');
+
+  // تبديل الثيم (Dark/Light)
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem(STORAGE_KEYS.theme, isDark ? 'dark' : 'light');
+  }
+
+  // تطبيق الثيم المحفوظ
+  function applySavedTheme() {
+    const theme = localStorage.getItem(STORAGE_KEYS.theme);
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+    else document.body.classList.remove('dark-mode');
+  }
+  applySavedTheme();
+
+  // ============================================================
+  //  دوال الرندر
+  // ============================================================
+  function renderAuthScreen(isLogin = true) {
+    app.innerHTML = `
+      <div class="auth-screen">
+        <div class="logo">⚽📚 منتدانا</div>
+        <h3>${isLogin ? 'أهلاً بك مرة أخرى 👋' : 'انضم إلينا الآن 🚀'}</h3>
+        <div id="authForm">
+          ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
+          <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
+          <input type="password" id="authPassword" placeholder="كلمة المرور" />
+          <button id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
+        </div>
+        <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
+        <div id="authMsg" class="msg" style="display:none;"></div>
+      </div>
+    `;
+
+    document.getElementById('authSubmitBtn').addEventListener('click', () => {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const msgDiv = document.getElementById('authMsg');
+      if (!email || !password) { msgDiv.style.display = 'block'; msgDiv.textContent = 'يرجى ملء جميع الحقول'; return; }
+
+      if (isLogin) {
+        const result = loginUser(email, password);
+        if (result.error) { msgDiv.style.display = 'block'; msgDiv.textContent = result.error; }
+        else { setCurrentUser(result.user); renderMainScreen(); }
       } else {
-        document.getElementById('form-signup').classList.add('active-form');
-        setAuthMessage('✍️ املأ البيانات لإنشاء حساب جديد', 'info');
+        const username = document.getElementById('regUsername').value.trim();
+        if (!username) { msgDiv.style.display = 'block'; msgDiv.textContent = 'يرجى كتابة اسم المستخدم'; return; }
+        const result = registerUser(username, email, password);
+        if (result.error) { msgDiv.style.display = 'block'; msgDiv.textContent = result.error; }
+        else { setCurrentUser(result.user); renderMainScreen(); }
       }
     });
-  });
 
-  // =============================================
-  // 5. دوال الشاشات
-  // =============================================
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
-  const showAuth = () => { showScreen('auth-screen');
-    setAuthMessage('🔑 مرحباً بعودتك', 'info'); };
-  const showApp = () => { showScreen('app-screen');
-    switchToForum(); };
-
-  // =============================================
-  // 6. التبديل بين المنتدى والدردشة
-  // =============================================
-  function switchToForum() {
-    if (unsubscribeChat) { unsubscribeChat();
-      unsubscribeChat = null; }
-    forumView.style.display = 'block';
-    chatView.style.display = 'none';
-    appTitle.textContent = '📰 المنتدى';
-    navForum.classList.add('active-tab');
-    navChat.classList.remove('active-tab');
-    if (!unsubscribeForum) loadForumPosts();
+    document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
   }
 
-  function switchToChat() {
-    if (unsubscribeForum) { unsubscribeForum();
-      unsubscribeForum = null; }
-    forumView.style.display = 'none';
-    chatView.style.display = 'block';
-    appTitle.textContent = '💬 غرفة الدردشة';
-    navChat.classList.add('active-tab');
-    navForum.classList.remove('active-tab');
-    if (!unsubscribeChat) loadChatMessages();
-  }
+  function renderMainScreen() {
+    const user = getCurrentUser();
+    if (!user) { renderAuthScreen(true); return; }
 
-  // =============================================
-  // 7. المنتدى (قراءة منشورات)
-  // =============================================
-  function loadForumPosts() {
-    let query = db.collection('posts').orderBy('createdAt', 'desc');
-    if (currentCategory !== 'all') query = query.where('category', '==', currentCategory);
-    unsubscribeForum = query.onSnapshot((snapshot) => {
-      if (snapshot.empty) {
-        postsContainer.innerHTML = '<div class="empty-state">📭 مفيش منشورات حالياً</div>';
+    let currentCategory = localStorage.getItem('forum_categoryFilter') || 'all';
+
+    function renderPosts(category) {
+      const posts = getPosts();
+      let filtered = category === 'all' ? posts : posts.filter(p => p.category === category);
+      const container = document.getElementById('feedContainer');
+      if (!container) return;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="msg">📭 لا توجد بوستات في هذا القسم، كن أول من يكتب!</div>`;
         return;
       }
-      postsContainer.innerHTML = '';
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        const div = document.createElement('div');
-        div.className = 'post-item';
-        div.innerHTML = `
-            <div class="post-category">📌 ${p.category}</div>
-            <h3>${p.title}</h3>
-            <p>${p.content}</p>
-            <small>✍️ ${p.authorName || 'مجهول'}</small>
-          `;
-        postsContainer.appendChild(div);
-      });
-    });
-  }
 
-  // =============================================
-  // 8. الدردشة (الحل النهائي لمشكلة عدم الظهور عند التانيين)
-  // =============================================
-  function loadChatMessages() {
-    // ** هنا الحل السحري: source: 'server' بيجبره يروح للسيرفر وميستخدمش الكاش **
-    const options = {
-      includeMetadataChanges: true,
-      source: 'server'
-    };
+      container.innerHTML = filtered.map(post => {
+        const isLiked = post.likes.includes(user.id);
+        const catClass = post.category === 'football' ? 'football' : 'novels';
+        const catEmoji = post.category === 'football' ? '⚽' : '📖';
+        return `
+          <div class="post-card" data-post-id="${post.id}">
+            <div class="post-header">
+              <span class="author">
+                <span class="avatar">${post.authorName.charAt(0)}</span>
+                ${post.authorName}
+              </span>
+              <span class="category-tag ${catClass}">${catEmoji} ${post.category === 'football' ? 'كرة' : 'روايات'}</span>
+            </div>
+            <div class="post-title">${post.title}</div>
+            <div class="post-content">${post.content}</div>
+            <div class="post-actions">
+              <button class="like-btn ${isLiked ? 'liked' : ''}" data-postid="${post.id}">
+                ${isLiked ? '❤️' : '🤍'} <span>${post.likes.length}</span>
+              </button>
+              <span style="color:var(--text-secondary);font-size:0.9rem;">💬 ${post.comments.length}</span>
+            </div>
+            <div class="comments-section">
+              ${post.comments.map(c => `
+                <div class="comment-bubble"><strong>${c.userName}</strong> ${c.text}</div>
+              `).join('')}
+              <div class="add-comment">
+                <input type="text" placeholder="اكتب تعليق..." class="comment-input" />
+                <button class="comment-submit" data-postid="${post.id}">نشر</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
 
-    unsubscribeChat = db.collection('chats').doc('general').collection('messages')
-      .orderBy('timestamp', 'asc')
-      .onSnapshot(options, (snapshot) => {
-        if (snapshot.empty) {
-          chatMessages.innerHTML = '<div class="empty-state">💬 مفيش رسائل، إبدأ أنت</div>';
-          return;
-        }
-        chatMessages.innerHTML = '';
-        snapshot.forEach(doc => {
-          const msg = doc.data();
-          const div = document.createElement('div');
-          div.className = 'message-item';
-          div.innerHTML = `
-              <strong>${msg.sender}</strong>
-              <span class="msg-time">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : 'الآن'}</span>
-              <p style="margin-top:5px;">${msg.text}</p>
-            `;
-          chatMessages.appendChild(div);
-        });
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, (error) => {
-        console.error("🔥 خطأ في جلب الرسائل:", error);
-        chatMessages.innerHTML = '<div class="empty-state">⚠️ مشكلة في الاتصال بالخادم</div>';
-      });
-  }
-
-  // =============================================
-  // 9. إرسال رسالة (من غير أي طلبات إضافية للـ Firestore)
-  // =============================================
-  async function sendMessage() {
-    const text = msgInput.value.trim();
-    if (!text) { showToast('✍️ اكتب رسالة أولاً', '#fdcb6e'); return; }
-    const user = auth.currentUser;
-    if (!user) { showToast('❌ برجاء تسجيل الدخول', '#ff6b6b'); return; }
-
-    sendBtn.disabled = true;
-    sendBtn.textContent = '⏳ جاري...';
-    try {
-      // ** بنستخدم المتغير المحفوظ عشان منطلبش من قاعدة البيانات حاجة **
-      const displayName = currentDisplayName || user.email || 'مجهول';
-
-      await db.collection('chats').doc('general').collection('messages').add({
-        text: text,
-        sender: displayName,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      msgInput.value = '';
-      showToast('✅ تم إرسال رسالتك!', '#2ecc71');
-    } catch (err) {
-      console.error(err);
-      showToast('❌ فشل الإرسال: ' + err.message, '#ff6b6b');
-    }
-    sendBtn.disabled = false;
-    sendBtn.textContent = 'إرسال';
-  }
-
-  // =============================================
-  // 10. أحداث الدخول وإنشاء الحساب
-  // =============================================
-  document.getElementById('login-btn').addEventListener('click', async () => {
-    const email = loginEmail.value.trim();
-    const pass = loginPass.value;
-    if (!email || !pass) { setAuthMessage('❌ من فضلك املأ البريد وكلمة المرور', 'error'); return; }
-    const btn = document.getElementById('login-btn');
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري الدخول...';
-    setAuthMessage('⏳ جاري التحقق...', 'loading');
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
-      setAuthMessage('✅ تم تسجيل الدخول بنجاح! 🎉', 'success');
-      showToast('🎉 مرحباً بعودتك!', '#2ecc71');
-    } catch (err) {
-      let msg = '❌ فشل الدخول: ';
-      if (err.code === 'auth/user-not-found') msg += 'المستخدم غير موجود';
-      else if (err.code === 'auth/wrong-password') msg += 'كلمة المرور خاطئة';
-      else if (err.code === 'auth/too-many-requests') msg += 'حاولت كتير، استنى شوية';
-      else msg += err.message;
-      setAuthMessage(msg, 'error');
-      showToast(msg, '#ff6b6b');
-    }
-    btn.disabled = false;
-    btn.textContent = 'دخول';
-  });
-
-  document.getElementById('signup-btn').addEventListener('click', async () => {
-    const name = fullName.value.trim();
-    const user = username.value.trim();
-    const email = signupEmail.value.trim();
-    const pass = signupPass.value;
-    const confirm = confirmPass.value;
-
-    if (!name || !user || !email || !pass || !confirm) {
-      setAuthMessage('❌ كل الحقول مطلوبة', 'error');
-      return;
-    }
-    if (pass.length < 6) { setAuthMessage('❌ كلمة المرور لازم 6 أحرف', 'error'); return; }
-    if (pass !== confirm) { setAuthMessage('❌ كلمة المرور غير متطابقة', 'error'); return; }
-
-    const btn = document.getElementById('signup-btn');
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري...';
-    setAuthMessage('⏳ جاري إنشاء الحساب...', 'loading');
-
-    try {
-      const cred = await auth.createUserWithEmailAndPassword(email, pass);
-      await db.collection('users').doc(cred.user.uid).set({
-        fullName: name,
-        username: user,
-        email: email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      setAuthMessage('✅ تم إنشاء الحساب بنجاح! 🎉', 'success');
-      showToast('🎉 حسابك اشتغل!', '#2ecc71');
-      fullName.value = '';
-      username.value = '';
-      signupEmail.value = '';
-      signupPass.value = '';
-      confirmPass.value = '';
-    } catch (err) {
-      let msg = '❌ فشل الإنشاء: ';
-      if (err.code === 'auth/email-already-in-use') msg += 'الإيميل مستخدم قبل كده';
-      else if (err.code === 'auth/invalid-email') msg += 'الإيميل مش صحيح';
-      else if (err.code === 'auth/weak-password') msg += 'كلمة المرور ضعيفة';
-      else msg += err.message;
-      setAuthMessage(msg, 'error');
-      showToast(msg, '#ff6b6b');
-    }
-    btn.disabled = false;
-    btn.textContent = '🚀 إنشاء حساب';
-  });
-
-  // =============================================
-  // 11. أحداث التنقل والفلتر
-  // =============================================
-  navForum.addEventListener('click', switchToForum);
-  navChat.addEventListener('click', switchToChat);
-
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
-      btn.classList.add('active-filter');
-      currentCategory = btn.dataset.cat;
-      if (unsubscribeForum) { unsubscribeForum();
-        unsubscribeForum = null; }
-      if (forumView.style.display !== 'none') loadForumPosts();
-      showToast(`📂 تم التبديل إلى: ${btn.textContent}`, '#6c5ce7');
-    });
-  });
-
-  // زرار تحديث الدردشة (حل إضافي لو حصل أي لبس)
-  document.getElementById('refresh-chat-btn')?.addEventListener('click', () => {
-    if (unsubscribeChat) {
-      unsubscribeChat();
-      unsubscribeChat = null;
-    }
-    chatMessages.innerHTML = '<div class="empty-state">⏳ جاري التحديث من السيرفر...</div>';
-    loadChatMessages();
-    showToast('🔄 تم تحديث الدردشة', '#6c5ce7');
-  });
-
-  sendBtn.addEventListener('click', sendMessage);
-  msgInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    auth.signOut();
-    showToast('👋 تم تسجيل الخروج', '#fdcb6e');
-  });
-
-  // =============================================
-  // 12. مراقبة حالة المستخدم (الأهم)
-  // =============================================
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      // ** بنجيب اسم المستخدم مرة واحدة بس ونخزنه في المتغير عشان نستخدمه في الدردشة **
-      db.collection('users').doc(user.uid).get()
-        .then(doc => {
-          if (doc.exists) {
-            currentDisplayName = doc.data().fullName || user.email || 'مجهول';
-          } else {
-            currentDisplayName = user.email || 'مجهول';
+      // أحداث اللايك (مع تأثير النفخة)
+      document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const postId = this.dataset.postid;
+          const updatedPost = toggleLike(postId, user.id);
+          if (updatedPost) {
+            // إضافة كلاس النفخة
+            this.classList.add('pop');
+            setTimeout(() => this.classList.remove('pop'), 400);
+            renderPosts(currentCategory);
           }
-          console.log('✅ تم تحميل اسم المستخدم:', currentDisplayName);
-        })
-        .catch(() => {
-          currentDisplayName = user.email || 'مجهول';
         });
+      });
 
-      showApp();
-      if (!unsubscribeForum && forumView.style.display !== 'none') loadForumPosts();
-    } else {
-      // إلغاء الاستماع عند الخروج
-      if (unsubscribeForum) { unsubscribeForum();
-        unsubscribeForum = null; }
-      if (unsubscribeChat) { unsubscribeChat();
-        unsubscribeChat = null; }
-      showAuth();
-      document.querySelector('.auth-tab[data-tab="login"]').click();
-      currentDisplayName = 'مجهول';
+      // أحداث الكومنت
+      document.querySelectorAll('.comment-submit').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const postId = this.dataset.postid;
+          const input = this.parentElement.querySelector('.comment-input');
+          const text = input.value.trim();
+          if (!text) return;
+          addComment(postId, user.id, user.username, text);
+          renderPosts(currentCategory);
+        });
+      });
     }
-  });
 
-  // دخول بالضغط على Enter
-  document.querySelectorAll('#form-login input, #form-signup input').forEach(inp => {
-    inp.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        if (document.getElementById('form-login').classList.contains('active-form')) {
-          document.getElementById('login-btn').click();
-        } else {
-          document.getElementById('signup-btn').click();
-        }
-      }
+    // بناء الواجهة
+    app.innerHTML = `
+      <div class="header">
+        <div class="brand">⚽📚 منتدانا</div>
+        <div class="user-info">
+          <span class="username-badge">👋 ${user.username}</span>
+          <button class="icon-btn" id="themeToggle" title="تبديل الوضع الداكن">🌙</button>
+          <button class="logout-btn" id="logoutBtn">تسجيل خروج</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="${currentCategory === 'all' ? 'active' : ''}" data-cat="all">
+          📰 الكل <span class="badge-count">${getCategoryCount('all')}</span>
+        </button>
+        <button class="${currentCategory === 'football' ? 'active' : ''}" data-cat="football">
+          ⚽ كرة <span class="badge-count">${getCategoryCount('football')}</span>
+        </button>
+        <button class="${currentCategory === 'novels' ? 'active' : ''}" data-cat="novels">
+          📖 روايات <span class="badge-count">${getCategoryCount('novels')}</span>
+        </button>
+      </div>
+
+      <div class="add-post">
+        <input type="text" id="postTitle" placeholder="عنوان البوست..." />
+        <textarea id="postContent" placeholder="محتوى البوست..."></textarea>
+        <select id="postCategory">
+          <option value="football">⚽ كرة القدم</option>
+          <option value="novels">📖 روايات</option>
+        </select>
+        <button class="submit-post-btn" id="addPostBtn">➕ إضافة بوست جديد</button>
+      </div>
+
+      <div id="feedContainer"></div>
+    `;
+
+    // أحداث التبويب
+    document.querySelectorAll('.tabs button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        localStorage.setItem('forum_categoryFilter', this.dataset.cat);
+        renderMainScreen();
+      });
     });
-  });
 
-  setAuthMessage('👈 اختر طريقة الدخول', 'info');
+    // حدث إضافة بوست
+    document.getElementById('addPostBtn').addEventListener('click', () => {
+      const title = document.getElementById('postTitle').value.trim();
+      const content = document.getElementById('postContent').value.trim();
+      const category = document.getElementById('postCategory').value;
+      if (!title || !content) { alert('يرجى كتابة العنوان والمحتوى'); return; }
+      addPost(title, content, category, user.id, user.username);
+      renderMainScreen();
+    });
+
+    // حدث تسجيل الخروج
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      setCurrentUser(null);
+      renderAuthScreen(true);
+    });
+
+    // حدث تبديل الثيم
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    renderPosts(currentCategory);
+  }
+
+  // ============================================================
+  //  تشغيل التطبيق
+  // ============================================================
+  if (getCurrentUser()) renderMainScreen();
+  else renderAuthScreen(true);
 </script>
 </body>
 </html>
