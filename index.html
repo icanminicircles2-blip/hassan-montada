@@ -3,46 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>منتدى الكورة والروايات - النسخة المتطورة</title>
+  <title>منتدى الكورة والروايات - الإصدار العصري</title>
   <style>
-    /* ============================================================
-       1. المتغيرات العامة (الثيم الأساسي + الدارك مود)
-       ============================================================ */
-    :root {
-      --bg-body: #f0f2f5;
-      --bg-app: #ffffff;
-      --bg-header: linear-gradient(135deg, #1e3c72, #2a5298);
-      --text-primary: #1c1e21;
-      --text-secondary: #65676b;
-      --bg-card: #ffffff;
-      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --border-color: #e4e6eb;
-      --input-bg: #f7f8fa;
-      --accent-blue: #1877f2;
-      --accent-hover: #0d65d9;
-      --category-football: #e74c3c;
-      --category-novels: #8e44ad;
-      --like-color: #1877f2;
-      --transition-speed: 0.3s;
-    }
-
-    /* ثيم الدارك مود */
-    body.dark-mode {
-      --bg-body: #18191a;
-      --bg-app: #242526;
-      --bg-header: linear-gradient(135deg, #0b1a30, #1a2a4a);
-      --text-primary: #e4e6eb;
-      --text-secondary: #b0b3b8;
-      --bg-card: #3a3b3c;
-      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
-      --border-color: #4e4f50;
-      --input-bg: #3a3b3c;
-      --accent-blue: #2d88ff;
-    }
-
-    /* ============================================================
-       2. التنسيقات العامة
-       ============================================================ */
+    /* ================================================================
+       1. المتغيرات الجديدة (بالتخلص من الفيسبوكية)
+       ================================================================ */
     * {
       margin: 0;
       padding: 0;
@@ -50,841 +15,1529 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
+    :root {
+      /* الألوان الأساسية الجديدة */
+      --primary: #4F46E5;
+      /* نيلي غامق */
+      --primary-light: #818CF8;
+      --primary-dark: #3730A3;
+      --accent: #F59E0B;
+      /* ذهبي/عنبر */
+      --accent-light: #FCD34D;
+      --bg-body: #F8FAFC;
+      --bg-app: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --card-bg: #FFFFFF;
+      --card-shadow: 0 4px 20px rgba(79, 70, 229, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+      --border-light: #E2E8F0;
+      --input-bg: #F1F5F9;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-ar: 'Segoe UI', 'Tahoma', sans-serif;
+    }
+
+    body.dark-mode {
+      --bg-body: #0F172A;
+      --bg-app: rgba(30, 41, 59, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.05);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #64748B;
+      --card-bg: #1E293B;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --border-light: #334155;
+      --input-bg: #334155;
+    }
+
+    /* ================================================================
+       2. الأساسيات والخلفية
+       ================================================================ */
     body {
       background: var(--bg-body);
       display: flex;
       justify-content: center;
-      padding: 20px;
+      padding: 30px 20px;
       min-height: 100vh;
-      transition: background var(--transition-speed);
+      transition: background var(--transition);
+      font-family: var(--font-ar);
     }
 
+    /* خلفية زجاجية للموقع نفسه */
     #app {
-      max-width: 720px;
+      max-width: 820px;
       width: 100%;
       background: var(--bg-app);
-      border-radius: 28px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-      padding: 24px;
-      min-height: 90vh;
-      transition: background var(--transition-speed), box-shadow var(--transition-speed);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      padding: 28px 30px;
+      min-height: 85vh;
+      transition: all var(--transition);
+      position: relative;
     }
 
-    /* ============================================================
-       3. شاشة تسجيل الدخول (محسنة)
-       ============================================================ */
+    /* ================================================================
+       3. شاشة المصادقة (بأسلوب الزجاج)
+       ================================================================ */
     .auth-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 75vh;
-      gap: 12px;
+      min-height: 70vh;
+      gap: 16px;
+      text-align: center;
     }
 
     .auth-screen .logo {
-      font-size: 3.5rem;
+      font-size: 3.2rem;
       font-weight: 800;
-      background: var(--bg-header);
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 10px;
     }
 
-    .auth-screen h3 {
+    .auth-screen .sub-logo {
       color: var(--text-secondary);
-      font-weight: 400;
-      margin-bottom: 15px;
+      font-size: 1rem;
+      margin-top: -8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 4px;
+      display: inline-block;
     }
 
-    .auth-screen input {
+    .auth-screen .auth-card {
+      background: var(--card-bg);
+      padding: 30px 25px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--card-shadow);
       width: 100%;
-      max-width: 320px;
-      padding: 14px 20px;
-      margin: 5px 0;
-      border: 2px solid var(--border-color);
-      border-radius: 40px;
-      font-size: 1rem;
+      max-width: 380px;
+      border: 1px solid var(--border-light);
+      margin-top: 12px;
+    }
+
+    .auth-screen .auth-card input {
+      width: 100%;
+      padding: 12px 18px;
+      margin: 8px 0;
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
       background: var(--input-bg);
       color: var(--text-primary);
-      transition: 0.2s;
+      font-size: 0.95rem;
       outline: none;
+      transition: 0.2s;
     }
 
-    .auth-screen input:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
+    .auth-screen .auth-card input:focus {
+      border-color: var(--primary);
+      background: var(--card-bg);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
-    .auth-screen button {
+    .auth-screen .auth-card .btn-primary {
       width: 100%;
-      max-width: 320px;
-      padding: 14px;
-      margin: 5px 0;
+      padding: 13px;
       border: none;
-      border-radius: 40px;
-      background: var(--accent-blue);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
+      transition: var(--transition);
+      margin-top: 8px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
 
-    .auth-screen button:hover {
-      background: var(--accent-hover);
-      transform: scale(1.02);
-      box-shadow: 0 6px 15px rgba(24, 119, 242, 0.4);
+    .auth-screen .auth-card .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
     }
 
     .auth-screen .switch-link {
-      color: var(--accent-blue);
-      cursor: pointer;
+      color: var(--primary);
       font-weight: 600;
-      margin-top: 12px;
-      transition: 0.2s;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 6px;
+      transition: var(--transition);
     }
     .auth-screen .switch-link:hover {
-      text-decoration: underline;
-      transform: scale(1.02);
+      color: var(--accent);
     }
 
-    /* ============================================================
-       4. الهيدر + زر الدارك مود
-       ============================================================ */
+    /* ================================================================
+       4. الهيدر العصري (شريط زجاجي)
+       ================================================================ */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 0 16px 0;
-      border-bottom: 2px solid var(--border-color);
-      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 22px;
     }
 
     .header .brand {
-      font-size: 1.9rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      background: var(--bg-header);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.5px;
     }
 
-    .header .user-info {
+    .header .brand small {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      -webkit-text-fill-color: var(--text-muted);
+      background: none;
+      margin-right: 6px;
+    }
+
+    .header .user-actions {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .header .user-info .username-badge {
-      background: var(--input-bg);
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-weight: 600;
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      font-size: 0.9rem;
-    }
-
-    .header .user-info .icon-btn {
-      background: var(--input-bg);
-      border: none;
+    .header .user-actions .avatar-circle {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .header .user-info .icon-btn:hover {
-      background: var(--border-color);
-      transform: rotate(10deg) scale(1.05);
-    }
-
-    .header .user-info .logout-btn {
-      background: #e74c3c;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 40px;
       color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 2px solid var(--accent);
+      overflow: hidden;
+    }
+
+    .header .user-actions .avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header .user-actions .username-text {
       font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .header .user-actions .icon-btn {
+      background: var(--input-bg);
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: 0.2s;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+    }
+
+    .header .user-actions .icon-btn:hover {
+      background: var(--border-light);
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .header .user-actions .logout-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
       font-size: 0.85rem;
     }
-    .header .user-info .logout-btn:hover {
-      background: #c0392b;
-      transform: scale(0.95);
+
+    .header .user-actions .logout-btn:hover {
+      background: #EF4444;
+      border-color: #EF4444;
+      color: white;
     }
 
-    /* ============================================================
-       5. التبويبات (Tabs) المحسنة
-       ============================================================ */
-    .tabs {
+    /* ================================================================
+       5. الإحصائيات (Dashboard) - على شكل شبكة أنيقة
+       ================================================================ */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      background: var(--card-bg);
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+      display: none;
+    }
+    .dashboard-grid.show {
+      display: grid;
+    }
+    .dashboard-grid .stat {
+      text-align: center;
+    }
+    .dashboard-grid .stat .num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .dashboard-grid .stat .label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ================================================================
+       6. شريط البحث والتبويبات (Underline Style)
+       ================================================================ */
+    .search-section {
       display: flex;
-      gap: 10px;
-      margin-bottom: 22px;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
-    .tabs button {
+    .search-section .search-input {
       flex: 1;
-      padding: 12px 6px;
-      border: none;
+      min-width: 180px;
+      padding: 10px 18px;
       border-radius: 40px;
+      border: 2px solid var(--border-light);
       background: var(--input-bg);
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    .search-section .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .tabs-underline {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--border-light);
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .tabs-underline button {
+      background: transparent;
+      border: none;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.25s;
-      border: 2px solid transparent;
+      transition: var(--transition);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
       position: relative;
     }
 
-    .tabs button .badge-count {
-      background: var(--border-color);
-      padding: 0px 10px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      color: var(--text-primary);
-      margin-right: 5px;
-    }
-
-    .tabs button.active {
-      background: var(--accent-blue);
-      color: white;
-      box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
-      border-color: var(--accent-blue);
-    }
-
-    .tabs button.active .badge-count {
-      background: rgba(255, 255, 255, 0.25);
-      color: white;
-    }
-
-    .tabs button:hover:not(.active) {
-      background: var(--border-color);
-      transform: translateY(-2px);
-    }
-
-    /* ============================================================
-       6. نموذج إضافة البوست (محسن)
-       ============================================================ */
-    .add-post {
+    .tabs-underline button .badge {
       background: var(--input-bg);
-      padding: 18px;
-      border-radius: 24px;
-      margin-bottom: 25px;
-      border: 1px solid var(--border-color);
-      transition: 0.3s;
-    }
-
-    .add-post input,
-    .add-post textarea,
-    .add-post select {
-      width: 100%;
-      padding: 12px 18px;
-      margin: 6px 0;
-      border: 2px solid transparent;
+      padding: 0px 8px;
       border-radius: 40px;
-      font-size: 0.95rem;
-      background: var(--bg-app);
+      font-size: 0.7rem;
+      margin-right: 4px;
+      color: var(--text-secondary);
+    }
+
+    .tabs-underline button.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .tabs-underline button.active .badge {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tabs-underline button:hover:not(.active) {
       color: var(--text-primary);
-      transition: 0.25s;
+      border-bottom-color: var(--border-light);
+    }
+
+    /* ================================================================
+       7. نموذج إضافة البوست (بسيط وأنيق)
+       ================================================================ */
+    .add-post-card {
+      background: var(--card-bg);
+      padding: 20px 22px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 28px;
+      transition: var(--transition);
+    }
+
+    .add-post-card input,
+    .add-post-card textarea,
+    .add-post-card select {
+      width: 100%;
+      padding: 10px 16px;
+      margin: 6px 0;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: var(--input-bg);
+      color: var(--text-primary);
       outline: none;
+      transition: var(--transition);
+      font-size: 0.95rem;
     }
 
-    .add-post input:focus,
-    .add-post textarea:focus,
-    .add-post select:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+    .add-post-card input:focus,
+    .add-post-card textarea:focus {
+      border-color: var(--primary);
+      background: var(--card-bg);
     }
 
-    .add-post textarea {
-      border-radius: 20px;
+    .add-post-card textarea {
       resize: vertical;
       min-height: 70px;
+      border-radius: var(--radius-sm);
     }
 
-    .add-post select {
-      appearance: none;
-      cursor: pointer;
-    }
-
-    .add-post .submit-post-btn {
-      background: linear-gradient(135deg, #1877f2, #0d65d9);
-      color: white;
-      border: none;
+    .add-post-card .btn-accent {
+      width: 100%;
       padding: 12px;
-      border-radius: 40px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent), #D97706);
+      color: white;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
-      transition: all 0.25s;
-      box-shadow: 0 4px 10px rgba(24, 119, 242, 0.25);
+      transition: var(--transition);
+      margin-top: 6px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
     }
 
-    .add-post .submit-post-btn:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 18px rgba(24, 119, 242, 0.35);
+    .add-post-card .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
     }
 
-    /* ============================================================
-       7. بطاقات البوستات (Card) - تحفة
-       ============================================================ */
+    /* ================================================================
+       8. بطاقات البوستات (أسلوب المجلات - خط جانبي)
+       ================================================================ */
     .post-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 18px 20px;
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--card-shadow);
+      padding: 22px 24px;
       margin-bottom: 22px;
-      box-shadow: var(--shadow-card);
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* الخط الجانبي المميز للقسم */
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary-light);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .post-card.category-football::before {
+      background: #EF4444;
+    }
+    .post-card.category-novels::before {
+      background: #8B5CF6;
+    }
+    .post-card.pinned::before {
+      background: var(--accent);
+      width: 8px;
     }
 
     .post-card:hover {
-      transform: translateY(-4px) scale(1.005);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.08);
     }
 
     .post-card .post-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
     }
 
-    .post-card .post-header .author {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text-primary);
+    .post-card .post-header .author-details {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
-    .post-card .post-header .author .avatar {
-      width: 32px;
-      height: 32px;
-      background: var(--accent-blue);
+    .post-card .post-header .author-details .avatar-sm {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
+      background: var(--primary-light);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      overflow: hidden;
     }
 
-    .post-card .post-header .category-tag {
-      padding: 5px 16px;
-      border-radius: 40px;
-      font-size: 0.7rem;
+    .post-card .post-header .author-details .avatar-sm img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .post-card .post-header .author-details .meta .name {
       font-weight: 700;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
     }
 
-    .category-tag.football {
-      background: var(--category-football);
+    .post-card .post-header .author-details .meta .time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
     }
-    .category-tag.novels {
-      background: var(--category-novels);
+
+    .post-card .post-header .category-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 40px;
+      background: var(--input-bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-light);
     }
 
     .post-card .post-title {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: var(--text-primary);
-      margin: 8px 0 4px;
+      margin: 8px 0 6px;
+      line-height: 1.4;
     }
 
     .post-card .post-content {
-      font-size: 1rem;
+      font-size: 0.98rem;
       color: var(--text-secondary);
-      margin: 6px 0 14px;
-      line-height: 1.6;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      word-break: break-word;
     }
 
-    /* أزرار التفاعل (لايك - كومنت) */
+    .post-card .post-content .mention {
+      color: var(--primary);
+      font-weight: 600;
+      background: rgba(79, 70, 229, 0.08);
+      padding: 0 6px;
+      border-radius: 4px;
+    }
+
+    .post-card .post-stats {
+      display: flex;
+      gap: 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 12px;
+    }
+
+    .post-card .post-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* أزرار التفاعل (Chips) */
     .post-card .post-actions {
       display: flex;
       align-items: center;
-      gap: 25px;
-      border-top: 1px solid var(--border-color);
-      padding-top: 14px;
-      margin-top: 6px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .post-card .post-actions .like-btn {
-      background: none;
+    .post-card .post-actions .action-chip {
+      background: var(--input-bg);
       border: none;
-      font-size: 1.1rem;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
       cursor: pointer;
+      transition: var(--transition);
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: var(--text-secondary);
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 40px;
-      transition: all 0.2s;
+      gap: 6px;
+      border: 1px solid transparent;
     }
 
-    .post-card .post-actions .like-btn:hover {
-      background: var(--input-bg);
+    .post-card .post-actions .action-chip:hover {
+      background: var(--border-light);
+      color: var(--text-primary);
     }
 
-    .post-card .post-actions .like-btn.liked {
-      color: var(--like-color);
+    .post-card .post-actions .action-chip.liked {
+      color: var(--accent);
+      background: rgba(245, 158, 11, 0.12);
+      border-color: var(--accent);
     }
 
-    .post-card .post-actions .like-btn.liked span {
-      color: var(--like-color);
+    .post-card .post-actions .action-chip .reaction-picker-trigger {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    /* تأثير النفخة عند الضغط على اللايك (يتم تشغيله عبر JS) */
-    @keyframes likePop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.6); }
-      100% { transform: scale(1); }
-    }
-    .post-card .post-actions .like-btn.pop {
-      animation: likePop 0.35s ease;
-    }
-
-    /* ============================================================
-       8. التعليقات (فقاعات دردشة)
-       ============================================================ */
-    .post-card .comments-section {
-      margin-top: 16px;
-      border-top: 1px solid var(--border-color);
+    /* ================================================================
+       9. التعليقات (بأسلوب النقاشات)
+       ================================================================ */
+    .comments-section {
+      margin-top: 18px;
+      border-top: 1px solid var(--border-light);
       padding-top: 16px;
     }
 
-    .post-card .comments-section .comment-bubble {
+    .comment-thread {
+      margin-bottom: 12px;
+    }
+
+    .comment-bubble {
       background: var(--input-bg);
-      padding: 10px 16px;
-      border-radius: 18px 18px 18px 4px;
-      margin: 6px 0 10px;
-      font-size: 0.95rem;
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      max-width: 90%;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+      margin-bottom: 4px;
     }
 
-    .post-card .comments-section .comment-bubble strong {
-      color: var(--accent-blue);
+    .comment-bubble .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .comment-bubble .comment-header .c-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.7rem;
       font-weight: 700;
-      display: inline-block;
-      margin-left: 6px;
+      overflow: hidden;
     }
 
-    .post-card .comments-section .add-comment {
+    .comment-bubble .comment-header strong {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .comment-bubble .comment-header .c-time {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .comment-bubble .comment-text {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    .comment-bubble .comment-actions {
+      margin-top: 6px;
+      display: flex;
+      gap: 14px;
+    }
+
+    .comment-bubble .comment-actions button {
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .comment-bubble .comment-actions button:hover {
+      color: var(--primary);
+    }
+
+    .replies-container {
+      margin-right: 28px;
+      border-right: 2px solid var(--border-light);
+      padding-right: 16px;
+    }
+
+    .add-comment-form {
       display: flex;
       gap: 10px;
-      margin-top: 12px;
-      align-items: center;
+      margin-top: 10px;
     }
 
-    .post-card .comments-section .add-comment input {
+    .add-comment-form input {
       flex: 1;
-      padding: 10px 18px;
-      border: 2px solid var(--border-color);
+      padding: 8px 16px;
       border-radius: 40px;
-      font-size: 0.9rem;
-      background: var(--bg-app);
+      border: 2px solid var(--border-light);
+      background: var(--card-bg);
       color: var(--text-primary);
       outline: none;
-      transition: 0.2s;
+      transition: var(--transition);
     }
 
-    .post-card .comments-section .add-comment input:focus {
-      border-color: var(--accent-blue);
+    .add-comment-form input:focus {
+      border-color: var(--primary);
     }
 
-    .post-card .comments-section .add-comment button {
-      background: var(--accent-blue);
-      color: white;
+    .add-comment-form button {
+      background: var(--primary);
       border: none;
-      padding: 10px 22px;
+      padding: 8px 20px;
       border-radius: 40px;
+      color: white;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
+      transition: var(--transition);
       white-space: nowrap;
     }
 
-    .post-card .comments-section .add-comment button:hover {
-      background: var(--accent-hover);
-      transform: scale(0.95);
+    .add-comment-form button:hover {
+      background: var(--primary-dark);
     }
 
-    /* ============================================================
-       9. رسائل وخلاصة
-       ============================================================ */
+    /* ================================================================
+       10. أدوات التحكم (للأونر)
+       ================================================================ */
+    .owner-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .owner-controls button {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      padding: 2px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .owner-controls button:hover {
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+    .owner-controls .edit-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .owner-controls .delete-btn:hover {
+      color: #EF4444;
+      border-color: #EF4444;
+    }
+
+    /* ================================================================
+       11. أدوات مساعدة (سلة، رسائل)
+       ================================================================ */
     .msg {
       background: var(--input-bg);
-      padding: 16px;
-      border-radius: 40px;
+      padding: 20px;
+      border-radius: var(--radius-md);
       text-align: center;
       color: var(--text-secondary);
-      border: 1px dashed var(--border-color);
-      margin: 15px 0;
-      font-weight: 500;
+      border: 1px dashed var(--border-light);
+      margin: 20px 0;
     }
 
-    /* ============================================================
-       10. تحسينات إضافية (سكرول ومسافات)
-       ============================================================ */
-    ::-webkit-scrollbar {
-      width: 6px;
+    #scrollToTop {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+      display: none;
+      transition: var(--transition);
+      z-index: 999;
     }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-body);
+    #scrollToTop.show {
+      display: block;
     }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-blue);
-      border-radius: 10px;
+    #scrollToTop:hover {
+      transform: scale(1.1) translateY(-4px);
     }
 
-    @media (max-width: 500px) {
-      #app { padding: 16px; }
-      .header .brand { font-size: 1.4rem; }
-      .post-card { padding: 14px; }
+    /* ================================================================
+       12. متجاوب
+       ================================================================ */
+    @media (max-width: 600px) {
+      #app {
+        padding: 16px;
+      }
+      .header .brand {
+        font-size: 1.3rem;
+      }
+      .post-card {
+        padding: 16px;
+      }
+      .replies-container {
+        margin-right: 14px;
+        padding-right: 10px;
+      }
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
 <body>
-<div id="app"></div>
+  <div id="app"></div>
+  <button id="scrollToTop" title="للأعلى">⬆</button>
 
-<script>
-  // ============================================================
-  //  البيانات و الـ LocalStorage (نفس الكود السابق لكن محسّن)
-  // ============================================================
-  const STORAGE_KEYS = {
-    users: 'forum_users',
-    posts: 'forum_posts',
-    currentUser: 'forum_currentUser',
-    theme: 'forum_theme'
-  };
+  <script>
+    // ================================================================
+    //  طبقة البيانات (Data Layer) - نفس المنطق القديم ولكن محسّن
+    // ================================================================
+    const STORAGE_KEYS = {
+      users: 'forum_users_v3',
+      posts: 'forum_posts_v3',
+      currentUser: 'forum_currentUser_v3',
+      theme: 'forum_theme_v3',
+      viewedPosts: 'forum_viewedPosts_v3'
+    };
 
-  function getData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-  function setData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
-  function getCurrentUser() { const u = localStorage.getItem(STORAGE_KEYS.currentUser); return u ? JSON.parse(u) : null; }
-  function setCurrentUser(user) { user ? localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user)) : localStorage.removeItem(STORAGE_KEYS.currentUser); }
+    function getData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
 
-  // دالة لجلب عدد البوستات حسب التصنيف
-  function getCategoryCount(category) {
-    const posts = getData(STORAGE_KEYS.posts);
-    if (category === 'all') return posts.length;
-    return posts.filter(p => p.category === category).length;
-  }
+    function setData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
 
-  // تهيئة البيانات الافتراضية
-  function initDefaultData() {
-    if (!localStorage.getItem(STORAGE_KEYS.users)) {
-      setData(STORAGE_KEYS.users, [
-        { id: '1', username: 'أحمد', email: 'ahmed@test.com', password: '123' },
-        { id: '2', username: 'سارة', email: 'sara@test.com', password: '123' }
-      ]);
-      setData(STORAGE_KEYS.posts, [
-        {
-          id: 'p1', title: 'أفضل مباراة في تاريخ الكورة', content: 'برأيكم مين الفريق اللي لعب أحسن مباراة في التاريخ؟ أنا شايف إن نهائي 2005 كان تحفة.',
-          category: 'football', authorId: '1', authorName: 'أحمد', likes: ['2'],
-          comments: [{ id: 'c1', userId: '2', userName: 'سارة', text: 'أنا معاك، لكن نهائي 2022 كان ملحمة!' }],
-          createdAt: Date.now() - 3600000
-        },
-        {
-          id: 'p2', title: 'رواية "ألف شمس ساطعة"', content: 'هل قرأتم رواية خالد حسيني؟ تستحق القراءة بجد، بتعكس واقع المرأة الأفغانية.',
-          category: 'novels', authorId: '2', authorName: 'سارة', likes: [],
-          comments: [{ id: 'c2', userId: '1', userName: 'أحمد', text: 'أنا قرأتها، مؤثرة جدًا.' }],
-          createdAt: Date.now() - 7200000
-        }
-      ]);
+    function getCurrentUser() { const u = localStorage.getItem(STORAGE_KEYS.currentUser); return u ? JSON.parse(u) : null; }
+
+    function setCurrentUser(user) { user ? localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user)) : localStorage
+        .removeItem(STORAGE_KEYS.currentUser); }
+
+    function getUsers() { return getData(STORAGE_KEYS.users); }
+
+    function setUsers(u) { setData(STORAGE_KEYS.users, u); }
+
+    function getPosts() { return getData(STORAGE_KEYS.posts); }
+
+    function setPosts(p) { setData(STORAGE_KEYS.posts, p); }
+
+    function getViewed() { return JSON.parse(localStorage.getItem(STORAGE_KEYS.viewedPosts)) || {}; }
+
+    function setViewed(v) { localStorage.setItem(STORAGE_KEYS.viewedPosts, JSON.stringify(v)); }
+
+    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+    function timeAgo(date) {
+      const s = Math.floor((Date.now() - date) / 1000);
+      if (s < 60) return 'الآن';
+      const m = Math.floor(s / 60);
+      if (m < 60) return `منذ ${m} د`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `منذ ${h} س`;
+      const d = Math.floor(h / 24);
+      if (d === 1) return 'أمس';
+      if (d < 7) return `منذ ${d} ي`;
+      return new Date(date).toLocaleDateString('ar-EG');
     }
-  }
-  initDefaultData();
 
-  // دوال العمليات
-  function getUsers() { return getData(STORAGE_KEYS.users); }
-  function setUsers(users) { setData(STORAGE_KEYS.users, users); }
-  function getPosts() { return getData(STORAGE_KEYS.posts); }
-  function setPosts(posts) { setData(STORAGE_KEYS.posts, posts); }
+    function getUserById(id) { return getUsers().find(u => u.id === id); }
 
-  function registerUser(username, email, password) {
-    const users = getUsers();
-    if (users.find(u => u.email === email)) return { error: 'البريد الإلكتروني مستخدم بالفعل' };
-    const newUser = { id: Date.now().toString(), username, email, password };
-    users.push(newUser);
-    setUsers(users);
-    const { password: _, ...safe } = newUser;
-    return { user: safe };
-  }
+    function getPostById(id) { return getPosts().find(p => p.id === id); }
 
-  function loginUser(email, password) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-    if (!user) return { error: 'البريد أو كلمة المرور غير صحيحة' };
-    const { password: _, ...safe } = user;
-    return { user: safe };
-  }
+    function getCategoryCount(cat) {
+      const posts = getPosts().filter(p => !p.deletedAt);
+      if (cat === 'all') return posts.length;
+      return posts.filter(p => p.category === cat).length;
+    }
 
-  function addPost(title, content, category, authorId, authorName) {
-    const posts = getPosts();
-    const newPost = { id: 'p' + Date.now(), title, content, category, authorId, authorName, likes: [], comments: [], createdAt: Date.now() };
-    posts.unshift(newPost);
-    setPosts(posts);
-    return newPost;
-  }
+    function getTotalReactions(post) {
+      if (!post.reactions) return 0;
+      return Object.values(post.reactions).reduce((a, b) => a + b.length, 0);
+    }
 
-  function toggleLike(postId, userId) {
-    const posts = getPosts();
-    const post = posts.find(p => p.id === postId);
-    if (!post) return null;
-    const idx = post.likes.indexOf(userId);
-    if (idx === -1) post.likes.push(userId);
-    else post.likes.splice(idx, 1);
-    setPosts(posts);
-    return post;
-  }
+    // دوال العمليات
+    function registerUser(username, email, password, profilePic = '') {
+      const users = getUsers();
+      if (users.find(u => u.email === email)) return { error: 'البريد مستخدم' };
+      const newUser = { id: generateId(), username, email, password, profilePic, joined: Date.now() };
+      users.push(newUser);
+      setUsers(users);
+      const { password: _, ...safe } = newUser;
+      return { user: safe };
+    }
 
-  function addComment(postId, userId, userName, text) {
-    const posts = getPosts();
-    const post = posts.find(p => p.id === postId);
-    if (!post) return null;
-    post.comments.push({ id: 'c' + Date.now(), userId, userName, text });
-    setPosts(posts);
-    return post;
-  }
+    function loginUser(email, password) {
+      const users = getUsers();
+      const user = users.find(u => u.email === email && u.password === password);
+      if (!user) return { error: 'بيانات غير صحيحة' };
+      const { password: _, ...safe } = user;
+      return { user: safe };
+    }
 
-  // ============================================================
-  //  الواجهة الرئيسية (UI)
-  // ============================================================
-  const app = document.getElementById('app');
-
-  // تبديل الثيم (Dark/Light)
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem(STORAGE_KEYS.theme, isDark ? 'dark' : 'light');
-  }
-
-  // تطبيق الثيم المحفوظ
-  function applySavedTheme() {
-    const theme = localStorage.getItem(STORAGE_KEYS.theme);
-    if (theme === 'dark') document.body.classList.add('dark-mode');
-    else document.body.classList.remove('dark-mode');
-  }
-  applySavedTheme();
-
-  // ============================================================
-  //  دوال الرندر
-  // ============================================================
-  function renderAuthScreen(isLogin = true) {
-    app.innerHTML = `
-      <div class="auth-screen">
-        <div class="logo">⚽📚 منتدانا</div>
-        <h3>${isLogin ? 'أهلاً بك مرة أخرى 👋' : 'انضم إلينا الآن 🚀'}</h3>
-        <div id="authForm">
-          ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
-          <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
-          <input type="password" id="authPassword" placeholder="كلمة المرور" />
-          <button id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
-        </div>
-        <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
-        <div id="authMsg" class="msg" style="display:none;"></div>
-      </div>
-    `;
-
-    document.getElementById('authSubmitBtn').addEventListener('click', () => {
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
-      const msgDiv = document.getElementById('authMsg');
-      if (!email || !password) { msgDiv.style.display = 'block'; msgDiv.textContent = 'يرجى ملء جميع الحقول'; return; }
-
-      if (isLogin) {
-        const result = loginUser(email, password);
-        if (result.error) { msgDiv.style.display = 'block'; msgDiv.textContent = result.error; }
-        else { setCurrentUser(result.user); renderMainScreen(); }
-      } else {
-        const username = document.getElementById('regUsername').value.trim();
-        if (!username) { msgDiv.style.display = 'block'; msgDiv.textContent = 'يرجى كتابة اسم المستخدم'; return; }
-        const result = registerUser(username, email, password);
-        if (result.error) { msgDiv.style.display = 'block'; msgDiv.textContent = result.error; }
-        else { setCurrentUser(result.user); renderMainScreen(); }
-      }
-    });
-
-    document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
-  }
-
-  function renderMainScreen() {
-    const user = getCurrentUser();
-    if (!user) { renderAuthScreen(true); return; }
-
-    let currentCategory = localStorage.getItem('forum_categoryFilter') || 'all';
-
-    function renderPosts(category) {
+    function addPost(title, content, category, authorId, authorName, authorPic) {
       const posts = getPosts();
-      let filtered = category === 'all' ? posts : posts.filter(p => p.category === category);
-      const container = document.getElementById('feedContainer');
-      if (!container) return;
+      const newPost = {
+        id: generateId(),
+        title,
+        content,
+        category,
+        authorId,
+        authorName,
+        authorPic,
+        reactions: { like: [], love: [], haha: [], sad: [], angry: [] },
+        comments: [],
+        views: 0,
+        pinned: false,
+        deletedAt: null,
+        createdAt: Date.now()
+      };
+      posts.unshift(newPost);
+      setPosts(posts);
+      return newPost;
+    }
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="msg">📭 لا توجد بوستات في هذا القسم، كن أول من يكتب!</div>`;
-        return;
-      }
+    function editPost(postId, newTitle, newContent) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      post.title = newTitle;
+      post.content = newContent;
+      setPosts(posts);
+      return post;
+    }
 
-      container.innerHTML = filtered.map(post => {
-        const isLiked = post.likes.includes(user.id);
-        const catClass = post.category === 'football' ? 'football' : 'novels';
-        const catEmoji = post.category === 'football' ? '⚽' : '📖';
-        return `
-          <div class="post-card" data-post-id="${post.id}">
-            <div class="post-header">
-              <span class="author">
-                <span class="avatar">${post.authorName.charAt(0)}</span>
-                ${post.authorName}
-              </span>
-              <span class="category-tag ${catClass}">${catEmoji} ${post.category === 'football' ? 'كرة' : 'روايات'}</span>
-            </div>
-            <div class="post-title">${post.title}</div>
-            <div class="post-content">${post.content}</div>
-            <div class="post-actions">
-              <button class="like-btn ${isLiked ? 'liked' : ''}" data-postid="${post.id}">
-                ${isLiked ? '❤️' : '🤍'} <span>${post.likes.length}</span>
-              </button>
-              <span style="color:var(--text-secondary);font-size:0.9rem;">💬 ${post.comments.length}</span>
-            </div>
-            <div class="comments-section">
-              ${post.comments.map(c => `
-                <div class="comment-bubble"><strong>${c.userName}</strong> ${c.text}</div>
-              `).join('')}
-              <div class="add-comment">
-                <input type="text" placeholder="اكتب تعليق..." class="comment-input" />
-                <button class="comment-submit" data-postid="${post.id}">نشر</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+    function deletePost(postId, soft = true) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      if (soft) { post.deletedAt = Date.now(); } else { const idx = posts.indexOf(post);
+        posts.splice(idx, 1); }
+      setPosts(posts);
+      return post;
+    }
 
-      // أحداث اللايك (مع تأثير النفخة)
-      document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          const postId = this.dataset.postid;
-          const updatedPost = toggleLike(postId, user.id);
-          if (updatedPost) {
-            // إضافة كلاس النفخة
-            this.classList.add('pop');
-            setTimeout(() => this.classList.remove('pop'), 400);
-            renderPosts(currentCategory);
+    function restorePost(postId) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      post.deletedAt = null;
+      setPosts(posts);
+      return post;
+    }
+
+    function togglePin(postId) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      posts.forEach(p => { if (p.pinned) p.pinned = false; });
+      post.pinned = !post.pinned;
+      setPosts(posts);
+      return post;
+    }
+
+    function addReaction(postId, userId, type) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      const valid = ['like', 'love', 'haha', 'sad', 'angry'];
+      if (!valid.includes(type)) return null;
+      valid.forEach(t => { const idx = post.reactions[t].indexOf(userId); if (idx !== -1) post.reactions[t].splice(idx, 1); });
+      post.reactions[type].push(userId);
+      setPosts(posts);
+      return post;
+    }
+
+    function addComment(postId, userId, userName, userPic, text, parentId = null) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      const newComment = { id: generateId(), userId, userName, userPic, text, parentId, replies: [], createdAt: Date.now() };
+      if (parentId) {
+        const parent = post.comments.find(c => c.id === parentId);
+        if (parent) { if (!parent.replies) parent.replies = [];
+          parent.replies.push(newComment); } else return null;
+      } else { post.comments.push(newComment); }
+      setPosts(posts);
+      return post;
+    }
+
+    function deleteComment(postId, commentId) {
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post) return null;
+      const removeRec = (arr) => {
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].id === commentId) { arr.splice(i, 1); return true; }
+          if (arr[i].replies) { if (removeRec(arr[i].replies)) return true; }
+        }
+        return false;
+      };
+      removeRec(post.comments);
+      setPosts(posts);
+      return post;
+    }
+
+    function incrementView(postId, userId) {
+      const viewed = getViewed();
+      const key = `${postId}_${userId}`;
+      if (viewed[key]) return;
+      viewed[key] = true;
+      setViewed(viewed);
+      const posts = getPosts();
+      const post = posts.find(p => p.id === postId);
+      if (post) { post.views = (post.views || 0) + 1;
+        setPosts(posts); }
+    }
+
+    function renderMentions(text) {
+      const users = getUsers();
+      let html = text;
+      const regex = /@(\w+)/g;
+      const matches = text.match(regex);
+      if (matches) {
+        matches.forEach(match => {
+          const username = match.slice(1);
+          if (users.find(u => u.username === username)) {
+            html = html.replace(match, `<span class="mention">@${username}</span>`);
           }
         });
-      });
+      }
+      return html;
+    }
 
-      // أحداث الكومنت
-      document.querySelectorAll('.comment-submit').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const postId = this.dataset.postid;
-          const input = this.parentElement.querySelector('.comment-input');
-          const text = input.value.trim();
-          if (!text) return;
-          addComment(postId, user.id, user.username, text);
-          renderPosts(currentCategory);
-        });
+    function compressImage(file, maxW = 80, maxH = 80) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let w = img.width,
+              h = img.height;
+            if (w > h) { if (w > maxW) { h *= maxW / w;
+                w = maxW; } } else { if (h > maxH) { w *= maxH / h;
+                h = maxH; } }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
       });
     }
 
-    // بناء الواجهة
-    app.innerHTML = `
-      <div class="header">
-        <div class="brand">⚽📚 منتدانا</div>
-        <div class="user-info">
-          <span class="username-badge">👋 ${user.username}</span>
-          <button class="icon-btn" id="themeToggle" title="تبديل الوضع الداكن">🌙</button>
-          <button class="logout-btn" id="logoutBtn">تسجيل خروج</button>
+    // ================================================================
+    //  واجهة المستخدم (UI) - العصري
+    // ================================================================
+    const app = document.getElementById('app');
+    const scrollBtn = document.getElementById('scrollToTop');
+
+    // Theme
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem(STORAGE_KEYS.theme, document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem(STORAGE_KEYS.theme) === 'dark') document.body.classList.add('dark-mode');
+
+    window.addEventListener('scroll', () => { scrollBtn.classList.toggle('show', window.scrollY > 300); });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ===== شاشة المصادقة =====
+    function renderAuthScreen(isLogin = true) {
+      app.innerHTML = `
+        <div class="auth-screen">
+          <div class="logo">⚽📚 منتدانا</div>
+          <div class="sub-logo">${isLogin ? 'مرحبًا بعودتك' : 'انضم لعائلة القراء والمشجعين'}</div>
+          <div class="auth-card">
+            <div id="authForm">
+              ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
+              <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
+              <input type="password" id="authPassword" placeholder="كلمة المرور" />
+              ${!isLogin ? `<input type="file" id="regPic" accept="image/*" style="padding:6px 12px;" />` : ''}
+              <button class="btn-primary" id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
+            </div>
+            <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
+            <div id="authMsg" class="msg" style="display:none;margin-top:12px;"></div>
+          </div>
         </div>
-      </div>
+      `;
 
-      <div class="tabs">
-        <button class="${currentCategory === 'all' ? 'active' : ''}" data-cat="all">
-          📰 الكل <span class="badge-count">${getCategoryCount('all')}</span>
-        </button>
-        <button class="${currentCategory === 'football' ? 'active' : ''}" data-cat="football">
-          ⚽ كرة <span class="badge-count">${getCategoryCount('football')}</span>
-        </button>
-        <button class="${currentCategory === 'novels' ? 'active' : ''}" data-cat="novels">
-          📖 روايات <span class="badge-count">${getCategoryCount('novels')}</span>
-        </button>
-      </div>
+      document.getElementById('authSubmitBtn').addEventListener('click', async () => {
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value.trim();
+        const msgDiv = document.getElementById('authMsg');
+        if (!email || !password) { msgDiv.style.display = 'block';
+          msgDiv.textContent = 'املأ جميع الحقول'; return; }
 
-      <div class="add-post">
-        <input type="text" id="postTitle" placeholder="عنوان البوست..." />
-        <textarea id="postContent" placeholder="محتوى البوست..."></textarea>
-        <select id="postCategory">
-          <option value="football">⚽ كرة القدم</option>
-          <option value="novels">📖 روايات</option>
-        </select>
-        <button class="submit-post-btn" id="addPostBtn">➕ إضافة بوست جديد</button>
-      </div>
-
-      <div id="feedContainer"></div>
-    `;
-
-    // أحداث التبويب
-    document.querySelectorAll('.tabs button').forEach(btn => {
-      btn.addEventListener('click', function() {
-        localStorage.setItem('forum_categoryFilter', this.dataset.cat);
-        renderMainScreen();
+        if (isLogin) {
+          const res = loginUser(email, password);
+          if (res.error) { msgDiv.style.display = 'block';
+            msgDiv.textContent = res.error; } else { setCurrentUser(res.user);
+            renderMainScreen(); }
+        } else {
+          const username = document.getElementById('regUsername').value.trim();
+          const fileInput = document.getElementById('regPic');
+          if (!username) { msgDiv.style.display = 'block';
+            msgDiv.textContent = 'اكتب اسم المستخدم'; return; }
+          let profilePic = '';
+          if (fileInput.files && fileInput.files[0]) { profilePic = await compressImage(fileInput.files[0]); }
+          const res = registerUser(username, email, password, profilePic);
+          if (res.error) { msgDiv.style.display = 'block';
+            msgDiv.textContent = res.error; } else { setCurrentUser(res.user);
+            renderMainScreen(); }
+        }
       });
-    });
 
-    // حدث إضافة بوست
-    document.getElementById('addPostBtn').addEventListener('click', () => {
-      const title = document.getElementById('postTitle').value.trim();
-      const content = document.getElementById('postContent').value.trim();
-      const category = document.getElementById('postCategory').value;
-      if (!title || !content) { alert('يرجى كتابة العنوان والمحتوى'); return; }
-      addPost(title, content, category, user.id, user.username);
-      renderMainScreen();
-    });
+      document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
+    }
 
-    // حدث تسجيل الخروج
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      setCurrentUser(null);
-      renderAuthScreen(true);
-    });
+    // ===== الشاشة الرئيسية (العصرية) =====
+    function renderMainScreen() {
+      const user = getCurrentUser();
+      if (!user) { renderAuthScreen(true); return; }
 
-    // حدث تبديل الثيم
-    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+      let currentCategory = localStorage.getItem('forum_filter_v3') || 'all';
+      let searchQuery = '';
+      let showTrash = false;
+      let showDashboard = false;
 
-    renderPosts(currentCategory);
-  }
+      // دوال العرض
+      function renderPosts() {
+        const container = document.getElementById('feedContainer');
+        if (!container) return;
 
-  // ============================================================
-  //  تشغيل التطبيق
-  // ============================================================
-  if (getCurrentUser()) renderMainScreen();
-  else renderAuthScreen(true);
-</script>
+        let posts = getPosts();
+
+        // فلتر السلة
+        if (showTrash) {
+          posts = posts.filter(p => p.deletedAt && p.authorId === user.id).sort((a, b) => b.deletedAt - a.deletedAt);
+        } else {
+          posts = posts.filter(p => !p.deletedAt);
+          if (currentCategory === 'my') {
+            posts = posts.filter(p => p.authorId === user.id);
+          } else if (currentCategory !== 'all') {
+            posts = posts.filter(p => p.category === currentCategory);
+          }
+          if (searchQuery.trim()) {
+            const q = searchQuery.trim().toLowerCase();
+            posts = posts.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+          }
+          posts.sort((a, b) => {
+            if (a.pinned && !b.pinned) return -1;
+            if (!a.pinned && b.pinned) return 1;
+            return b.createdAt - a.createdAt;
+          });
+        }
+
+        if (posts.length === 0) {
+          container.innerHTML =
+            `<div class="msg">${showTrash ? '🗑️ سلة المحذوفات فارغة' : '📭 لا توجد بوستات بعد، اكتب أول بوست!'}</div>`;
+          return;
+        }
+
+        container.innerHTML = posts.map(post => {
+          const isOwner = post.authorId === user.id;
+          const reactions = post.reactions || { like: [], love: [], haha: [], sad: [], angry: [] };
+          const totalReactions = Object.values(reactions).reduce((a, b) => a + b.length, 0);
+          const userReactionType = Object.keys(reactions).find(key => reactions[key].includes(user.id));
+          const isDeleted = !!post.deletedAt;
+          const catClass = post.category === 'football' ? 'category-football' : 'category-novels';
+
+          return `
+            <div class="post-card ${catClass} ${post.pinned ? 'pinned' : ''}" data-id="${post.id}">
+              <div class="post-header">
+                <div class="author-details">
+                  ${post.authorPic ? `<div class="avatar-sm"><img src="${post.authorPic}" /></div>` : `<div class="avatar-sm">${post.authorName?.charAt(0) || '?'}</div>`}
+                  <div class="meta">
+                    <div class="name">${post.authorName || 'مجهول'} ${post.pinned ? '📌' : ''}</div>
+                    <div class="time">${timeAgo(post.createdAt)} ${isDeleted ? '· 🗑️ محذوف' : ''}</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                  <span class="category-badge">${post.category === 'football' ? '⚽ كرة' : '📖 روايات'}</span>
+                  ${isOwner && !isDeleted ? `
+                    <div class="owner-controls">
+                      <button class="edit-btn" data-action="edit">✏️</button>
+                      <button class="delete-btn" data-action="delete">🗑️</button>
+                      <button data-action="pin">${post.pinned ? 'إلغاء' : '📌'}</button>
+                    </div>
+                  ` : ''}
+                  ${isDeleted ? `<button data-action="restore" style="background:var(--accent);border:none;padding:4px 14px;border-radius:30px;color:white;font-weight:700;cursor:pointer;">استعادة</button>` : ''}
+                </div>
+              </div>
+
+              ${!isDeleted ? `
+                <div class="post-title" id="title-${post.id}">${post.title}</div>
+                <div class="post-content" id="content-${post.id}">${renderMentions(post.content)}</div>
+                <div class="post-stats">
+                  <span>👁️ ${post.views || 0}</span>
+                  <span>💬 ${post.comments?.length || 0}</span>
+                  <span>❤️ ${totalReactions}</span>
+                </div>
+                <div class="post-actions">
+                  <button class="action-chip ${userReactionType ? 'liked' : ''}" data-action="reaction">
+                    ${userReactionType ? getReactionEmoji(userReactionType) : '❤️'} <span>${totalReactions}</span>
+                  </button>
+                  <button class="action-chip" data-action="toggleComments">💬 تعليقات (${post.comments?.length || 0})</button>
+                </div>
+                <div class="comments-section" id="comments-${post.id}" style="display:block;">
+                  ${renderComments(post, user)}
+                  <div class="add-comment-form">
+                    <input type="text" placeholder="اكتب تعليق..." class="comment-input-main" data-post="${post.id}" />
+                    <button class="comment-submit-main" data-post="${post.id}">نشر</button>
+                  </div>
+                </div>
+              ` : `
+                <div class="post-content" style="color:var(--text-muted);font-style:italic;">تم حذف هذا البوست بواسطة الكاتب.</div>
+              `}
+            </div>
+          `;
+        }).join('');
+
+        // ربط الأحداث (بنفس الطريقة السابقة ولكن مختصرة لضيق المساحة)
+        bindEvents();
+      }
+
+      function getReactionEmoji(type) {
+        const map = { like: '👍', love: '❤️', haha: '😂', sad: '😢', angry: '😡' };
+        return map[type] || '❤️';
+      }
+
+      function renderComments(post, user, parentId = null, depth = 0) {
+        let comments = post.comments || [];
+        if (parentId) {
+          const parent = comments.find(c => c.id === parentId);
+          if (parent) comments = parent.replies || [];
+          else return '';
+        } else {
+          comments = comments.filter(c => !c.parentId);
+        }
+        if (comments.length === 0) return '';
+        return comments.map(c => {
+          const isOwner = c.userId === user.id;
+          return `
+            <div class="comment-thread" style="margin-right:${depth * 10}px;">
+              <div class="comment-bubble">
+                <div class="comment-header">
+                  ${c.userPic ? `<div class="c-avatar"><img src="${c.userPic}" style="width:100%;height:100%;object-fit:cover;" /></div>` : `<div class="c-avatar">${c.userName?.charAt(0) || '?'}</div>`}
+                  <strong>${c.userName || 'مجهول'}</strong>
+                  <span class="c-time">${timeAgo(c.createdAt)}</span>
+                  ${isOwner ? `<button class="delete-comment" data-postid="${post.id}" data-commentid="${c.id}" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:0.7rem;">🗑️</button>` : ''}
+                </div>
+                <div class="comment-text">${renderMentions(c.text)}</div>
+                <div class="comment-actions">
+                  <button class="reply-to-comment" data-postid="${post.id}" data-commentid="${c.id}">رد</button>
+                </div>
+                <div class="add-comment-form" id="reply-form-${post.id}-${c.id}" style="display:none;margin-top:6px;">
+                  <input type="text" placeholder="اكتب رد..." class="reply-input" />
+                  <button class="reply-submit" data-postid="${post.id}" data-commentid="${c.id}">نشر</button>
+                </div>
+              </div>
+              <div class="replies-container">
+                ${renderComments(post, user, c.id, depth + 1)}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function bindEvents() {
+        // Edit
+        document.querySelectorAll('[data-action="edit"]').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.closest('.post-card').dataset.id;
+            const titleEl = document.getElementById(`title-${id}`);
+            const contentEl = document.getElementById(`content-${id}`);
+            if (!titleEl || !contentEl) return;
+            const newTitle = prompt('عدل العنوان:', titleEl.innerText);
+            if (newTitle === null) return;
+            const newContent = prompt('عدل المحتوى:', contentEl.innerText);
+            if (newContent === null) return;
+            editPost(id, newTitle, newContent);
+            renderPosts();
+          });
+        });
+        // Delete
+        document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (!confirm('نقل إلى سلة المحذوفات؟')) return;
+            const id = this.closest('.post-card').dataset.id;
+            deletePost(id, true);
+            renderPosts();
+          });
+        });
+        // Restore
+        document.querySelectorAll('[data-action="restore"]').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.closest('.post-card').dataset.id;
+            restorePost(id);
+            renderPosts();
+          });
+        });
+        // Pin
+        document.querySelectorAll('[data-action="pin"]').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.closest('.post-card').dataset.id;
+            togglePin(id);
+            renderPosts();
+          });
+        });
+        // Reactions
+        document.querySelectorAll('[data-action="reaction"]').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Simplified: cycle through reactions or just add like
+            // For simplicity, we'll toggle 'like' on click, or open a picker? Let's do like toggle.
+            const id = this.closest('.post-card').dataset.id;
+            // Check if user already liked
+            const post = getPostById(id);
+            if (!post) return;
+            const liked = post.reactions.like.includes(user.id);
+            if (liked) {
+              // Remove like
+              const idx = post.reactions.like.indexOf(user.id);
+              if (idx !== -1) post.reactions.like.splice(idx, 1);
+            } else {
+              post.reactions.like.push(user.id);
+            }
+            setPosts(getPosts()); // save
+            renderPosts();
+          });
+        });
+        // Toggle comments
+        document.querySelectorAll('[data-action="toggleComments"]').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const card = this.closest('.post-card');
+            const section = card.querySelector('.comments-section');
+            if (section) section.style.display = section.style.display === 'none' ? 'block' : 'none';
+          });
+        });
+        // Main comment
+        document.querySelectorAll('.comment-submit-main').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const postId = this.dataset.post;
+            const input = this.parentElement.querySelector('.comment-input-main');
+            const text = input.value.trim();
+            if (!text) return;
+            addComment(postId, user.id, user.username, user.profilePic || '', text);
+            input.value = '';
+            renderPosts();
+          });
+        });
+        // Reply
+        document.querySelectorAll('.reply-to-comment').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const commentId = this.dataset.commentid;
+            const postId = this.dataset.postid;
+            const form = document.getElementById(`reply-form-${postId}-${commentId}`);
+            if (form) {
+              form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+              form.querySelector('input')?.focus();
+            }
+          });
+        });
+        document.querySelectorAll('.reply-submit').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const postId = this.dataset.postid;
+            const commentId = this.dataset.commentid;
+            const input = this.parentElement.querySelector('.reply-input');
+            const text = input.value.trim();
+            if (!text) return;
+            addComment(postId, user.id, user.username, user.profilePic || '', text, commentId);
+            input.value = '';
+            this.parentElement.style.display = 'none';
+            renderPosts();
+          });
+        });
+        document.querySelectorAll('.delete-comment').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (!confirm('حذف التعليق؟')) return;
+            const postId = this.dataset.postid;
+            const commentId = this.dataset.commentid;
+            deleteComment(postId, commentId);
+            renderPosts();
+          });
+        });
+        // Views
+        document.querySelectorAll('.post-card:not(.deleted)').forEach(card => {
+          const id = card.dataset.id;
+          const post = getPostById(id);
+          if (post && !post.deletedAt) incrementView(id, user.id);
+        });
+      }
+
+      // ===== بناء هيكل الصفحة العصري =====
+      app.innerHTML = `
+        <div class="header">
+          <div class="brand">⚽📚 منتدانا <small>Beta</small></div>
+          <div class="user-actions">
+            <div class="avatar-circle">
+              ${user.profilePic ? `<img src="${user.profilePic}" />` : user.username.charAt(0).toUpperCase()}
+            </div>
+            <span class="username-text">${user.username}</span>
+            <button class="icon-btn" id="themeToggle" title="الوضع المظلم">🌙</button>
+            <button class="icon-btn" id="dashboardToggle" title="الإحصائيات">📊</button>
+            <button class="icon-btn" id="trashToggle" title="سلة المحذوفات">🗑️</button>
+            <button class="logout-btn" id="logoutBtn">خروج</button>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" id="dashboardPopup">
+          <div class="stat"><div class="num">${getPosts().filter(p => p.authorId === user.id && !p.deletedAt).length}</div><div class="label">بوستاتي</div></div>
+          <div class="stat"><div class="num">${getPosts().filter(p => p.authorId === user.id).reduce((acc, p) => acc + getTotalReactions(p), 0)}</div><div class="label">تفاعلات</div></div>
+          <div class="stat"><div class="num">${getPosts().filter(p => p.authorId === user.id).reduce((acc, p) => acc + (p.views || 0), 0)}</div><div class="label">مشاهدات</div></div>
+          <div class="stat"><div class="num">${getPosts().filter(p => p.authorId === user.id && p.deletedAt).length}</div><div class="label">محذوف</div></div>
+        </div>
+
+        <div class="search-section">
+          <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث في العناوين والمحتوى..." />
+        </div>
+
+        <div class="tabs-underline">
+          <button class="${currentCategory === 'all' ? 'active' : ''}" data-cat="all">الكل <span class="badge">${getCategoryCount('all')}</span></button>
+          <button class="${currentCategory === 'football' ? 'active' : ''}" data-cat="football">⚽ كرة <span class="badge">${getCategoryCount('football')}</span></button>
+          <button class="${currentCategory === 'novels' ? 'active' : ''}" data-cat="novels">📖 روايات <span class="badge">${getCategoryCount('novels')}</span></button>
+          <button class="${currentCategory === 'my' ? 'active' : ''}" data-cat="my">👤 بوستاتي</button>
+        </div>
+
+        <div class="add-post-card" id="addPostCard">
+          <input type="text" id="postTitle" placeholder="عنوان البوست..." />
+          <textarea id="postContent" placeholder="محتوى البوست... (استخدم @اسم_المستخدم للمنشن)"></textarea>
+          <select id="postCategory">
+            <option value="football">⚽ كرة القدم</option>
+            <option value="novels">📖 روايات</option>
+          </select>
+          <button class="btn-accent" id="addPostBtn">➕ إضافة بوست جديد</button>
+        </div>
+
+        <div id="feedContainer"></div>
+      `;
+
+      // ===== أحداث الواجهة الجديدة =====
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        setCurrentUser(null);
+        renderAuthScreen(true);
+      });
+
+      document.getElementById('dashboardToggle').addEventListener('click', () => {
+        document.getElementById('dashboardPopup').classList.toggle('show');
+      });
+
+      document.getElementById('trashToggle').addEventListener('click', () => {
+        showTrash = !showTrash;
+        if (showTrash) {
+          document.getElementById('dashboardPopup').classList.remove('show');
+          document.getElementById('addPostCard').style.display = 'none';
+          document.querySelector('.search-section').style.display = 'none';
+          document.querySelector('.tabs-underline').style.display = 'none';
+        } else {
+          document.getElementById('addPostCard').style.display = 'block';
+          document.querySelector('.search-section').style.display = 'flex';
+          document.querySelector('.tabs-underline').style.display = 'flex';
+        }
+        renderPosts();
+      });
+
+      document.getElementById('searchInput').addEventListener('input', function() {
+        searchQuery = this.value;
+        if (showTrash) return;
+        renderPosts();
+      });
+
+      document.querySelectorAll('.tabs-underline button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (showTrash) return;
+          currentCategory = this.dataset.cat;
+          localStorage.setItem('forum_filter_v3', currentCategory);
+          renderPosts();
+        });
+      });
+
+      document.getElementById('addPostBtn').addEventListener('click', () => {
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        const category = document.getElementById('postCategory').value;
+        if (!title || !content) { alert('املأ العنوان والمحتوى'); return; }
+        const u = getCurrentUser();
+        addPost(title, content, category, u.id, u.username, u.profilePic || '');
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        renderPosts();
+      });
+
+      renderPosts();
+    }
+
+    // ===== بدء التشغيل =====
+    const user = getCurrentUser();
+    if (user) renderMainScreen();
+    else renderAuthScreen(true);
+  </script>
 </body>
 </html>
