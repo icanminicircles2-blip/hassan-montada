@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منتدى الكورة والروايات - Firebase</title>
   <style>
-    /* نفس الـ CSS السابق (بدون تغيير) - أضفه هنا */
+    /* ===== نفس الـ CSS السابق (بدون تغيير) ===== */
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
     :root { --primary:#4F46E5; --primary-light:#818CF8; --primary-dark:#3730A3; --accent:#F59E0B; --accent-light:#FCD34D; --bg-body:#F8FAFC; --bg-app:rgba(255,255,255,0.75); --glass-border:rgba(255,255,255,0.3); --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#94A3B8; --card-bg:#FFFFFF; --card-shadow:0 4px 20px rgba(79,70,229,0.06),0 1px 3px rgba(0,0,0,0.02); --border-light:#E2E8F0; --input-bg:#F1F5F9; --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --transition:0.25s cubic-bezier(0.4,0,0.2,1); --font-ar:'Segoe UI','Tahoma',sans-serif; }
     body.dark-mode { --bg-body:#0F172A; --bg-app:rgba(30,41,59,0.85); --glass-border:rgba(255,255,255,0.05); --text-primary:#F1F5F9; --text-secondary:#CBD5E1; --text-muted:#64748B; --card-bg:#1E293B; --card-shadow:0 4px 20px rgba(0,0,0,0.4); --border-light:#334155; --input-bg:#334155; }
@@ -109,7 +109,9 @@
 <button id="scrollToTop" title="للأعلى">⬆</button>
 
 <script type="module">
-  // ===== استيراد Firebase =====
+  // ================================================================
+  // استيراد Firebase
+  // ================================================================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
     getAuth,
@@ -130,7 +132,9 @@
     get
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  // ===== تكوين Firebase (استبدل ببيانات مشروعك) =====
+  // ================================================================
+  // تكوين Firebase
+  // ================================================================
   const firebaseConfig = {
     apiKey: "AIzaSyCBkRZYp0nJ8KD1hrnRrJhtqAYXPPyWxX4",
     authDomain: "hassan-montada.firebaseapp.com",
@@ -146,7 +150,9 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  // ===== متغيرات الحالة العامة =====
+  // ================================================================
+  // متغيرات الحالة
+  // ================================================================
   let currentUser = null;
   let allPosts = [];
   let postsListener = null;
@@ -155,7 +161,9 @@
   let showTrash = false;
   let commentsVisibility = {};
 
-  // ===== أدوات مساعدة =====
+  // ================================================================
+  // أدوات مساعدة
+  // ================================================================
   function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 
   function timeAgo(date) {
@@ -177,62 +185,62 @@
   }
 
   function renderMentions(text) {
-    // لا نستخدم users هنا لأننا سنحصل عليهم من Firebase، ولكن نكتفي بتحويل @username إلى سبان
-    // سنقوم بجلب المستخدمين من قاعدة البيانات إذا أردنا التحقق، لكن للتبسيط نتركها
     return text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
   }
 
-  // ===== دوال Firebase: المصادقة =====
+  // ================================================================
+  // دوال Firebase: المصادقة
+  // ================================================================
   async function registerUser(username, email, password, profilePic = '') {
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = cred.user;
-    // تحديث الاسم في Authentication
-    await updateProfile(user, { displayName: username });
-    // حفظ البيانات الإضافية في Realtime Database
-    await set(ref(db, `users/${user.uid}`), {
-      username,
-      email,
-      profilePic,
-      joined: Date.now()
-    });
-    // إرجاع كائن المستخدم مع جميع البيانات
-    return { 
-      user: { 
-        uid: user.uid, 
-        username, 
-        email, 
-        profilePic 
-      } 
-    };
-  } catch (error) {
-    return { error: error.message };
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+      await updateProfile(user, { displayName: username });
+      await set(ref(db, `users/${user.uid}`), {
+        username,
+        email,
+        profilePic,
+        joined: Date.now()
+      });
+      return { 
+        user: { 
+          uid: user.uid, 
+          username, 
+          email, 
+          profilePic 
+        } 
+      };
+    } catch (error) {
+      return { error: error.message };
+    }
   }
-}
-async function loginUser(email, password) {
-  try {
-    const cred = await signInWithEmailAndPassword(auth, email, password);
-    const user = cred.user;
-    const snapshot = await get(ref(db, `users/${user.uid}`));
-    const data = snapshot.val() || {};
-    return { 
-      user: { 
-        uid: user.uid, 
-        username: data.username || user.displayName || '', 
-        email: user.email, 
-        profilePic: data.profilePic || '' 
-      } 
-    };
-  } catch (error) {
-    return { error: error.message };
+
+  async function loginUser(email, password) {
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+      const snapshot = await get(ref(db, `users/${user.uid}`));
+      const data = snapshot.val() || {};
+      return { 
+        user: { 
+          uid: user.uid, 
+          username: data.username || user.displayName || '', 
+          email: user.email, 
+          profilePic: data.profilePic || '' 
+        } 
+      };
+    } catch (error) {
+      return { error: error.message };
+    }
   }
-}
 
   function logoutUser() {
     signOut(auth);
   }
 
-  // ===== دوال Firebase: البوستات =====
+  // ================================================================
+  // دوال Firebase: البوستات
+  // ================================================================
   async function addPostToFirebase(title, content, category, authorId, authorName, authorPic) {
     const newPostRef = push(ref(db, 'posts'));
     const postData = {
@@ -271,7 +279,6 @@ async function loginUser(email, password) {
   }
 
   async function togglePinInFirebase(postId) {
-    // إلغاء تثبيت كل البوستات أولاً
     const snapshot = await get(ref(db, 'posts'));
     const data = snapshot.val();
     if (data) {
@@ -281,7 +288,6 @@ async function loginUser(email, password) {
       });
       await update(ref(db, 'posts'), updates);
     }
-    // تثبيت البوست الحالي (عكس الحالة)
     const postRef = ref(db, `posts/${postId}`);
     const postSnap = await get(postRef);
     const post = postSnap.val();
@@ -298,20 +304,17 @@ async function loginUser(email, password) {
     const post = snapshot.val();
     if (!post) return;
     const reactions = post.reactions || {};
-    // إزالة التفاعلات السابقة من نفس المستخدم
     valid.forEach(t => {
       if (reactions[t] && reactions[t].includes(userId)) {
         const idx = reactions[t].indexOf(userId);
         if (idx !== -1) reactions[t].splice(idx, 1);
       }
     });
-    // إضافة التفاعل الجديد
     if (!reactions[type]) reactions[type] = [];
     reactions[type].push(userId);
     await update(postRef, { reactions });
   }
 
-  // دوال التعليقات (مع دعم الردود)
   async function addCommentToFirebase(postId, userId, userName, userPic, text, parentId = null) {
     const postRef = ref(db, `posts/${postId}`);
     const snapshot = await get(postRef);
@@ -330,15 +333,12 @@ async function loginUser(email, password) {
       createdAt: Date.now()
     };
     if (parentId) {
-      // نبحث عن التعليق الأب ونضيف الرد في replies
       const parentComment = comments[parentId];
       if (parentComment) {
         if (!parentComment.replies) parentComment.replies = {};
         parentComment.replies[newCommentId] = newComment;
         comments[parentId] = parentComment;
       } else {
-        // قد يكون الأب في ردود أخرى، نبحث بشكل متكرر (هنا نكتفي بالبحث في المستوى الأول)
-        // لكن للتبسيط نبحث في كل التعليقات
         let found = false;
         for (let key in comments) {
           if (comments[key].replies && comments[key].replies[parentId]) {
@@ -361,7 +361,6 @@ async function loginUser(email, password) {
     const post = snapshot.val();
     if (!post) return;
     const comments = post.comments || {};
-    // حذف من أي مستوى (نبحث)
     const removeRec = (obj) => {
       for (let key in obj) {
         if (key === commentId) {
@@ -379,7 +378,6 @@ async function loginUser(email, password) {
   }
 
   async function incrementViewInFirebase(postId, userId) {
-    // نستخدم طريقة بسيطة: زيادة views بـ 1 (بدون منع التكرار لأننا سنستخدمها محلياً)
     const postRef = ref(db, `posts/${postId}`);
     const snapshot = await get(postRef);
     const post = snapshot.val();
@@ -389,7 +387,9 @@ async function loginUser(email, password) {
     }
   }
 
-  // ===== مستمع البوستات في الوقت الفعلي =====
+  // ================================================================
+  // مستمع البوستات في الوقت الفعلي
+  // ================================================================
   function startPostsListener() {
     if (postsListener) {
       postsListener();
@@ -403,19 +403,18 @@ async function loginUser(email, password) {
       } else {
         allPosts = [];
       }
-      // تحديث الواجهة
       renderPosts();
       updateTabBadges();
       updateDashboard();
     });
   }
 
-  // ===== دوال واجهة المستخدم =====
-
+  // ================================================================
+  // دوال واجهة المستخدم
+  // ================================================================
   const appDiv = document.getElementById('app');
   const scrollBtn = document.getElementById('scrollToTop');
 
-  // Theme
   function toggleTheme() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('forum_theme_v3', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -425,95 +424,108 @@ async function loginUser(email, password) {
   window.addEventListener('scroll', () => { scrollBtn.classList.toggle('show', window.scrollY > 300); });
   scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  // ===== شاشة المصادقة =====
-function renderAuthScreen(isLogin = true) {
-  appDiv.innerHTML = `
-    <div class="auth-screen">
-      <div class="logo">⚽📚 منتدانا</div>
-      <div class="sub-logo">${isLogin ? 'مرحبًا بعودتك' : 'انضم لعائلة القراء والمشجعين'}</div>
-      <div class="auth-card">
-        <div id="authForm">
-          ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
-          <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
-          <input type="password" id="authPassword" placeholder="كلمة المرور" />
-          ${!isLogin ? `<input type="file" id="regPic" accept="image/*" style="padding:6px 12px;" />` : ''}
-          <button class="btn-primary" id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
+  // ================================================================
+  // شاشة المصادقة
+  // ================================================================
+  function renderAuthScreen(isLogin = true) {
+    appDiv.innerHTML = `
+      <div class="auth-screen">
+        <div class="logo">⚽📚 منتدانا</div>
+        <div class="sub-logo">${isLogin ? 'مرحبًا بعودتك' : 'انضم لعائلة القراء والمشجعين'}</div>
+        <div class="auth-card">
+          <div id="authForm">
+            ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
+            <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
+            <input type="password" id="authPassword" placeholder="كلمة المرور" />
+            ${!isLogin ? `<input type="file" id="regPic" accept="image/*" style="padding:6px 12px;" />` : ''}
+            <button class="btn-primary" id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
+          </div>
+          <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
+          <div id="authMsg" class="msg" style="display:none;margin-top:12px;"></div>
         </div>
-        <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
-        <div id="authMsg" class="msg" style="display:none;margin-top:12px;"></div>
       </div>
-    </div>
-  `;
+    `;
 
-  document.getElementById('authSubmitBtn').addEventListener('click', async () => {
-    const email = document.getElementById('authEmail').value.trim();
-    const password = document.getElementById('authPassword').value.trim();
-    const msgDiv = document.getElementById('authMsg');
-    if (!email || !password) {
-      msgDiv.style.display = 'block';
-      msgDiv.textContent = 'املأ جميع الحقول';
-      return;
-    }
-
-    if (isLogin) {
-      const res = await loginUser(email, password);
-      if (res.error) {
+    document.getElementById('authSubmitBtn').addEventListener('click', async () => {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const msgDiv = document.getElementById('authMsg');
+      
+      if (!email || !password) {
         msgDiv.style.display = 'block';
-        msgDiv.textContent = res.error;
-      }
-      // سيتم التعامل مع تسجيل الدخول عبر onAuthStateChanged
-    } else {
-      const username = document.getElementById('regUsername').value.trim();
-      const fileInput = document.getElementById('regPic');
-      if (!username) {
-        msgDiv.style.display = 'block';
-        msgDiv.textContent = 'اكتب اسم المستخدم';
+        msgDiv.textContent = '❌ املأ جميع الحقول';
         return;
       }
-      let profilePic = '';
-      if (fileInput.files && fileInput.files[0]) {
-        profilePic = await compressImage(fileInput.files[0]);
-      }
-      const res = await registerUser(username, email, password, profilePic);
-      if (res.error) {
-        msgDiv.style.display = 'block';
-        msgDiv.textContent = res.error;
+
+      if (isLogin) {
+        const res = await loginUser(email, password);
+        if (res.error) {
+          msgDiv.style.display = 'block';
+          msgDiv.textContent = '❌ ' + res.error;
+        }
       } else {
-        // ✅ تعيين currentUser مباشرة من النتيجة
-        currentUser = res.user;
-        renderMainScreen();
+        const username = document.getElementById('regUsername').value.trim();
+        const fileInput = document.getElementById('regPic');
+        if (!username) {
+          msgDiv.style.display = 'block';
+          msgDiv.textContent = '❌ اكتب اسم المستخدم';
+          return;
+        }
+        let profilePic = '';
+        if (fileInput.files && fileInput.files[0]) {
+          try {
+            profilePic = await compressImage(fileInput.files[0]);
+          } catch (err) {
+            msgDiv.style.display = 'block';
+            msgDiv.textContent = '❌ خطأ في تحميل الصورة';
+            return;
+          }
+        }
+        const res = await registerUser(username, email, password, profilePic);
+        if (res.error) {
+          msgDiv.style.display = 'block';
+          msgDiv.textContent = '❌ ' + res.error;
+        } else {
+          currentUser = res.user;
+          renderMainScreen();
+        }
       }
-    }
-  });
+    });
 
-  document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
-}
+    document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
+  }
 
-  // دالة ضغط الصورة (نفسها)
-function compressImage(file, maxW = 80, maxH = 80) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        if (w > h) { if (w > maxW) { h *= maxW / w; w = maxW; } } 
-        else { if (h > maxH) { w *= maxH / h; h = maxH; } }
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', 0.7));
+  // ================================================================
+  // دالة ضغط الصورة
+  // ================================================================
+  function compressImage(file, maxW = 80, maxH = 80) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          if (w > h) { if (w > maxW) { h *= maxW / w; w = maxW; } } 
+          else { if (h > maxH) { w *= maxH / h; h = maxH; } }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target.result;
       };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
+      reader.readAsDataURL(file);
+    });
+  }
 
-  // ===== الشاشة الرئيسية =====
+  // ================================================================
+  // الشاشة الرئيسية
+  // ================================================================
   function renderMainScreen() {
     if (!currentUser) return;
+
+    const isAdmin = currentUser.email === 'hassan@gmail.com';
 
     appDiv.innerHTML = `
       <div class="header">
@@ -523,6 +535,7 @@ function compressImage(file, maxW = 80, maxH = 80) {
             ${currentUser.profilePic ? `<img src="${currentUser.profilePic}" />` : currentUser.username.charAt(0).toUpperCase()}
           </div>
           <span class="username-text">${currentUser.username}</span>
+          ${isAdmin ? `<button class="icon-btn" id="adminPanelBtn" title="لوحة التحكم">⚙️</button>` : ''}
           <button class="icon-btn" id="themeToggle" title="الوضع المظلم">🌙</button>
           <button class="icon-btn" id="dashboardToggle" title="الإحصائيات">📊</button>
           <button class="icon-btn" id="trashToggle" title="سلة المحذوفات">🗑️</button>
@@ -565,6 +578,10 @@ function compressImage(file, maxW = 80, maxH = 80) {
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     document.getElementById('logoutBtn').addEventListener('click', () => logoutUser());
 
+    if (isAdmin) {
+      document.getElementById('adminPanelBtn').addEventListener('click', () => renderAdminPanel());
+    }
+
     document.getElementById('dashboardToggle').addEventListener('click', () => {
       document.getElementById('dashboardPopup').classList.toggle('show');
     });
@@ -597,7 +614,6 @@ function compressImage(file, maxW = 80, maxH = 80) {
         if (showTrash) return;
         currentCategory = this.dataset.cat;
         localStorage.setItem('forum_filter_v3', currentCategory);
-        // تحديث التبويبات النشطة
         document.querySelectorAll('.tabs-underline button').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         renderPosts();
@@ -612,10 +628,8 @@ function compressImage(file, maxW = 80, maxH = 80) {
       await addPostToFirebase(title, content, category, currentUser.uid, currentUser.username, currentUser.profilePic || '');
       document.getElementById('postTitle').value = '';
       document.getElementById('postContent').value = '';
-      // التحديث سيتم تلقائيًا عبر المستمع
     });
 
-    // تحميل الفلتر المحفوظ
     const savedCat = localStorage.getItem('forum_filter_v3');
     if (savedCat) {
       currentCategory = savedCat;
@@ -624,16 +638,15 @@ function compressImage(file, maxW = 80, maxH = 80) {
       });
     }
 
-    // بدء المستمع
     startPostsListener();
-    // عرض البوستات الأولية
     renderPosts();
     updateTabBadges();
     updateDashboard();
   }
 
-  // ===== دوال العرض والتحديث =====
-
+  // ================================================================
+  // دوال العرض والتحديث
+  // ================================================================
   function renderPosts() {
     const container = document.getElementById('feedContainer');
     if (!container) return;
@@ -665,7 +678,6 @@ function compressImage(file, maxW = 80, maxH = 80) {
       return;
     }
 
-    // تحميل حالة التعليقات من localStorage
     const savedVisibility = JSON.parse(localStorage.getItem('commentsVisibility') || '{}');
 
     container.innerHTML = posts.map(post => {
@@ -729,7 +741,6 @@ function compressImage(file, maxW = 80, maxH = 80) {
       `;
     }).join('');
 
-    // ربط الأحداث
     bindPostEvents();
   }
 
@@ -737,7 +748,6 @@ function compressImage(file, maxW = 80, maxH = 80) {
     const comments = post.comments || {};
     let filtered = [];
     if (parentId) {
-      // البحث عن التعليق الأب
       const findComment = (obj) => {
         for (let key in obj) {
           if (key === parentId) return obj[key];
@@ -831,7 +841,6 @@ function compressImage(file, maxW = 80, maxH = 80) {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
         const id = this.closest('.post-card').dataset.id;
-        // نضيف like فقط (تبسيط)
         addReactionToFirebase(id, currentUser.uid, 'like');
       });
     });
@@ -894,12 +903,11 @@ function compressImage(file, maxW = 80, maxH = 80) {
         deleteCommentFromFirebase(postId, commentId);
       });
     });
-    // Views (نضيف عرض عند التحميل)
+    // Views
     document.querySelectorAll('.post-card:not(.deleted)').forEach(card => {
       const id = card.dataset.id;
       const post = allPosts.find(p => p.id === id);
       if (post && !post.deletedAt) {
-        // نزيد المشاهدة مرة واحدة لكل مستخدم (نستخدم localStorage مؤقت)
         const viewedKey = `viewed_${id}_${currentUser.uid}`;
         if (!localStorage.getItem(viewedKey)) {
           localStorage.setItem(viewedKey, 'true');
@@ -930,36 +938,192 @@ function compressImage(file, maxW = 80, maxH = 80) {
     document.getElementById('statDeleted').textContent = myDeleted.length;
   }
 
-  // ===== مراقبة حالة المصادقة =====
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // إذا كان currentUser غير معرف (حالة تسجيل الدخول العادي)، نقرأ البيانات
-    if (!currentUser) {
-      get(ref(db, `users/${user.uid}`)).then(snap => {
-        const data = snap.val() || {};
-        currentUser = {
-          uid: user.uid,
-          username: data.username || user.displayName || '',
-          email: user.email,
-          profilePic: data.profilePic || ''
-        };
-        renderMainScreen();
-      });
-    } else {
-      // إذا كان currentUser موجوداً (حالة التسجيل)، ننتقل مباشرة
-      renderMainScreen();
+  // ================================================================
+  // دوال الإدارة (لوحة التحكم)
+  // ================================================================
+    // ===== دوال الإدارة (لوحة التحكم) =====
+  async function loadUsers() {
+    try {
+      const snapshot = await get(ref(db, 'users'));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        return Object.keys(data).map(uid => ({ uid, ...data[uid] }));
+      }
+      return [];
+    } catch (error) {
+      console.error('خطأ في جلب المستخدمين:', error);
+      return [];
     }
-  } else {
-    currentUser = null;
-    if (postsListener) {
-      postsListener();
-      postsListener = null;
-    }
-    renderAuthScreen(true);
   }
-});
 
-  // بدء التشغيل (المصادقة ستقرر أي شاشة)
+  async function deleteUser(uid) {
+    if (!confirm('هل أنت متأكد من حذف هذا المستخدم نهائياً؟')) return;
+    try {
+      await remove(ref(db, `users/${uid}`));
+      alert('تم حذف المستخدم');
+      // إعادة تحميل المحتوى بعد الحذف
+      loadAdminContent();
+    } catch (e) {
+      alert('حدث خطأ: ' + e.message);
+    }
+  }
+
+  async function deletePostAdmin(postId) {
+    if (!confirm('هل أنت متأكد من حذف هذا البوست نهائياً؟')) return;
+    try {
+      await remove(ref(db, `posts/${postId}`));
+      alert('تم حذف البوست');
+      loadAdminContent();
+    } catch (e) {
+      alert('حدث خطأ: ' + e.message);
+    }
+  }
+
+  function renderAdminPanel() {
+    appDiv.innerHTML = `
+      <div class="header">
+        <div class="brand">⚽📚 منتدانا <small>Admin</small></div>
+        <div class="user-actions">
+          <button class="logout-btn" id="backToAppBtn">العودة إلى المنتدى</button>
+          <button class="logout-btn" id="logoutBtn">خروج</button>
+        </div>
+      </div>
+      <h2 style="margin-bottom:20px;color:var(--text-primary);">لوحة التحكم</h2>
+      <div id="adminContent">
+        <div class="msg">جاري التحميل...</div>
+      </div>
+    `;
+
+    document.getElementById('backToAppBtn').addEventListener('click', () => renderMainScreen());
+    document.getElementById('logoutBtn').addEventListener('click', () => logoutUser());
+
+    loadAdminContent();
+  }
+
+  async function loadAdminContent() {
+    const container = document.getElementById('adminContent');
+    if (!container) return;
+
+    try {
+      // جلب المستخدمين والبوستات بالتوازي
+      const [users, postsSnapshot] = await Promise.all([
+        loadUsers(),
+        get(ref(db, 'posts'))
+      ]);
+
+      const posts = postsSnapshot.exists() ? Object.values(postsSnapshot.val()) : [];
+
+      // إحصائيات
+      const totalUsers = users.length;
+      const totalPosts = posts.length;
+      const activePosts = posts.filter(p => !p.deletedAt).length;
+      const deletedPosts = posts.filter(p => p.deletedAt).length;
+      const footballPosts = posts.filter(p => p.category === 'football' && !p.deletedAt).length;
+      const novelsPosts = posts.filter(p => p.category === 'novels' && !p.deletedAt).length;
+
+      // عرض المحتوى
+      container.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px;">
+          <div class="stat"><div class="num">${totalUsers}</div><div class="label">المستخدمين</div></div>
+          <div class="stat"><div class="num">${totalPosts}</div><div class="label">إجمالي البوستات</div></div>
+          <div class="stat"><div class="num">${activePosts}</div><div class="label">بوستات نشطة</div></div>
+          <div class="stat"><div class="num">${deletedPosts}</div><div class="label">محذوفة</div></div>
+          <div class="stat"><div class="num">${footballPosts}</div><div class="label">⚽ كرة</div></div>
+          <div class="stat"><div class="num">${novelsPosts}</div><div class="label">📖 روايات</div></div>
+        </div>
+
+        <h3 style="margin:20px 0 10px;color:var(--text-primary);">👥 المستخدمون</h3>
+        <div style="overflow-x:auto;background:var(--card-bg);border-radius:var(--radius-md);padding:10px;border:1px solid var(--border-light);">
+          <table style="width:100%;border-collapse:collapse;text-align:right;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border-light);">
+                <th style="padding:8px;">اسم المستخدم</th>
+                <th style="padding:8px;">البريد</th>
+                <th style="padding:8px;">تاريخ الانضمام</th>
+                <th style="padding:8px;">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${users.map(u => `
+                <tr style="border-bottom:1px solid var(--border-light);">
+                  <td style="padding:8px;">${u.username || 'غير معروف'}</td>
+                  <td style="padding:8px;">${u.email || ''}</td>
+                  <td style="padding:8px;">${u.joined ? new Date(u.joined).toLocaleDateString('ar-EG') : 'غير معروف'}</td>
+                  <td style="padding:8px;">
+                    <button class="delete-user-btn" data-uid="${u.uid}" style="background:#EF4444;border:none;padding:4px 12px;border-radius:20px;color:white;cursor:pointer;">حذف</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:20px 0 10px;color:var(--text-primary);">📝 البوستات (آخر 10)</h3>
+        <div style="background:var(--card-bg);border-radius:var(--radius-md);padding:10px;border:1px solid var(--border-light);">
+          ${posts.slice(0,10).map(p => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <div>
+                <strong style="color:var(--text-primary);">${p.title || 'بدون عنوان'}</strong>
+                <span style="color:var(--text-muted);font-size:0.8rem;margin-right:12px;">${p.authorName || 'مجهول'}</span>
+                <span style="color:var(--text-muted);font-size:0.7rem;">${p.deletedAt ? '🗑️ محذوف' : ''}</span>
+              </div>
+              <div>
+                <button class="delete-post-btn" data-postid="${p.id}" style="background:#EF4444;border:none;padding:2px 12px;border-radius:20px;color:white;cursor:pointer;font-size:0.8rem;">حذف</button>
+              </div>
+            </div>
+          `).join('')}
+          ${posts.length > 10 ? `<div style="text-align:center;color:var(--text-muted);padding:8px;">... وعرض ${posts.length - 10} بوستات أخرى</div>` : ''}
+        </div>
+      `;
+
+      // ربط أحداث الحذف
+      container.querySelectorAll('.delete-user-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const uid = this.dataset.uid;
+          await deleteUser(uid);
+        });
+      });
+
+      container.querySelectorAll('.delete-post-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const postId = this.dataset.postid;
+          await deletePostAdmin(postId);
+        });
+      });
+
+    } catch (error) {
+      console.error('خطأ في تحميل محتوى لوحة التحكم:', error);
+      container.innerHTML = `<div class="msg">❌ حدث خطأ في تحميل البيانات: ${error.message}</div>`;
+    }
+  }
+  // ================================================================
+  // مراقبة حالة المصادقة
+  // ================================================================
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (!currentUser) {
+        get(ref(db, `users/${user.uid}`)).then(snap => {
+          const data = snap.val() || {};
+          currentUser = {
+            uid: user.uid,
+            username: data.username || user.displayName || '',
+            email: user.email,
+            profilePic: data.profilePic || ''
+          };
+          renderMainScreen();
+        });
+      } else {
+        renderMainScreen();
+      }
+    } else {
+      currentUser = null;
+      if (postsListener) {
+        postsListener();
+        postsListener = null;
+      }
+      renderAuthScreen(true);
+    }
+  });
 </script>
 </body>
 </html>
