@@ -1096,6 +1096,46 @@
       container.innerHTML = `<div class="msg">❌ حدث خطأ في تحميل البيانات: ${error.message}</div>`;
     }
   }
+  // حذف جميع المستخدمين ما عدا المستثنين (مثلاً المشرف)
+async function deleteAllUsersExcept(excludedUids = []) {
+  if (!confirm('تحذير: هذا الإجراء سيحذف جميع المستخدمين نهائياً. استمرار؟')) return;
+  try {
+    const snapshot = await get(ref(db, 'users'));
+    if (!snapshot.exists()) {
+      alert('لا يوجد مستخدمين للحذف.');
+      return;
+    }
+    const users = snapshot.val();
+    const updates = {};
+    let count = 0;
+    for (const uid in users) {
+      if (!excludedUids.includes(uid)) {
+        updates[uid] = null; // يعني حذف
+        count++;
+      }
+    }
+    if (count === 0) {
+      alert('لا يوجد مستخدمين للحذف (جميعهم مستثنون).');
+      return;
+    }
+    await update(ref(db, 'users'), updates);
+    alert(`تم حذف ${count} مستخدم بنجاح.`);
+    // إعادة تحميل لوحة التحكم لتحديث القائمة
+    loadAdminContent();
+  } catch (error) {
+    alert('حدث خطأ: ' + error.message);
+  }
+}
+async function deleteAllUsers() {
+  if (!confirm('تحذير شديد: هذا سيحذف جميع المستخدمين بدون استثناء. استمرار؟')) return;
+  try {
+    await remove(ref(db, 'users'));
+    alert('تم حذف جميع المستخدمين.');
+    loadAdminContent();
+  } catch (error) {
+    alert('خطأ: ' + error.message);
+  }
+}
   // ================================================================
   // مراقبة حالة المصادقة
   // ================================================================
