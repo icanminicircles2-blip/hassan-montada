@@ -184,33 +184,49 @@
 
   // ===== دوال Firebase: المصادقة =====
   async function registerUser(username, email, password, profilePic = '') {
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      const user = cred.user;
-      await updateProfile(user, { displayName: username });
-      await set(ref(db, `users/${user.uid}`), {
-        username,
-        email,
-        profilePic,
-        joined: Date.now()
-      });
-      return { user: { uid: user.uid, username, email, profilePic } };
-    } catch (error) {
-      return { error: error.message };
-    }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+    // تحديث الاسم في Authentication
+    await updateProfile(user, { displayName: username });
+    // حفظ البيانات الإضافية في Realtime Database
+    await set(ref(db, `users/${user.uid}`), {
+      username,
+      email,
+      profilePic,
+      joined: Date.now()
+    });
+    // إرجاع كائن المستخدم مع جميع البيانات
+    return { 
+      user: { 
+        uid: user.uid, 
+        username, 
+        email, 
+        profilePic 
+      } 
+    };
+  } catch (error) {
+    return { error: error.message };
   }
-
-  async function loginUser(email, password) {
-    try {
-      const cred = await signInWithEmailAndPassword(auth, email, password);
-      const user = cred.user;
-      const snapshot = await get(ref(db, `users/${user.uid}`));
-      const data = snapshot.val() || {};
-      return { user: { uid: user.uid, username: data.username || user.displayName || '', email: user.email, profilePic: data.profilePic || '' } };
-    } catch (error) {
-      return { error: error.message };
-    }
+}
+async function loginUser(email, password) {
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+    const snapshot = await get(ref(db, `users/${user.uid}`));
+    const data = snapshot.val() || {};
+    return { 
+      user: { 
+        uid: user.uid, 
+        username: data.username || user.displayName || '', 
+        email: user.email, 
+        profilePic: data.profilePic || '' 
+      } 
+    };
+  } catch (error) {
+    return { error: error.message };
   }
+}
 
   function logoutUser() {
     signOut(auth);
@@ -410,73 +426,90 @@
   scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   // ===== شاشة المصادقة =====
-  function renderAuthScreen(isLogin = true) {
-    appDiv.innerHTML = `
-      <div class="auth-screen">
-        <div class="logo">⚽📚 منتدانا</div>
-        <div class="sub-logo">${isLogin ? 'مرحبًا بعودتك' : 'انضم لعائلة القراء والمشجعين'}</div>
-        <div class="auth-card">
-          <div id="authForm">
-            ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
-            <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
-            <input type="password" id="authPassword" placeholder="كلمة المرور" />
-            ${!isLogin ? `<input type="file" id="regPic" accept="image/*" style="padding:6px 12px;" />` : ''}
-            <button class="btn-primary" id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
-          </div>
-          <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
-          <div id="authMsg" class="msg" style="display:none;margin-top:12px;"></div>
+function renderAuthScreen(isLogin = true) {
+  appDiv.innerHTML = `
+    <div class="auth-screen">
+      <div class="logo">⚽📚 منتدانا</div>
+      <div class="sub-logo">${isLogin ? 'مرحبًا بعودتك' : 'انضم لعائلة القراء والمشجعين'}</div>
+      <div class="auth-card">
+        <div id="authForm">
+          ${!isLogin ? `<input type="text" id="regUsername" placeholder="اسم المستخدم" />` : ''}
+          <input type="email" id="authEmail" placeholder="البريد الإلكتروني" />
+          <input type="password" id="authPassword" placeholder="كلمة المرور" />
+          ${!isLogin ? `<input type="file" id="regPic" accept="image/*" style="padding:6px 12px;" />` : ''}
+          <button class="btn-primary" id="authSubmitBtn">${isLogin ? 'دخول' : 'إنشاء حساب'}</button>
         </div>
+        <div class="switch-link" id="switchAuthMode">${isLogin ? 'ليس لديك حساب؟ سجل الآن' : 'لديك حساب؟ سجل دخول'}</div>
+        <div id="authMsg" class="msg" style="display:none;margin-top:12px;"></div>
       </div>
-    `;
+    </div>
+  `;
 
-    document.getElementById('authSubmitBtn').addEventListener('click', async () => {
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
-      const msgDiv = document.getElementById('authMsg');
-      if (!email || !password) { msgDiv.style.display = 'block'; msgDiv.textContent = 'املأ جميع الحقول'; return; }
+  document.getElementById('authSubmitBtn').addEventListener('click', async () => {
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value.trim();
+    const msgDiv = document.getElementById('authMsg');
+    if (!email || !password) {
+      msgDiv.style.display = 'block';
+      msgDiv.textContent = 'املأ جميع الحقول';
+      return;
+    }
 
-      if (isLogin) {
-        const res = await loginUser(email, password);
-        if (res.error) { msgDiv.style.display = 'block'; msgDiv.textContent = res.error; }
-        // else سيتم التعامل معه عبر onAuthStateChanged
-      } else {
-        const username = document.getElementById('regUsername').value.trim();
-        const fileInput = document.getElementById('regPic');
-        if (!username) { msgDiv.style.display = 'block'; msgDiv.textContent = 'اكتب اسم المستخدم'; return; }
-        let profilePic = '';
-        if (fileInput.files && fileInput.files[0]) {
-          // ضغط الصورة (نفس الدالة السابقة)
-          profilePic = await compressImage(fileInput.files[0]);
-        }
-        const res = await registerUser(username, email, password, profilePic);
-        if (res.error) { msgDiv.style.display = 'block'; msgDiv.textContent = res.error; }
-        // else سيتم التعامل معه عبر onAuthStateChanged
+    if (isLogin) {
+      const res = await loginUser(email, password);
+      if (res.error) {
+        msgDiv.style.display = 'block';
+        msgDiv.textContent = res.error;
       }
-    });
+      // سيتم التعامل مع تسجيل الدخول عبر onAuthStateChanged
+    } else {
+      const username = document.getElementById('regUsername').value.trim();
+      const fileInput = document.getElementById('regPic');
+      if (!username) {
+        msgDiv.style.display = 'block';
+        msgDiv.textContent = 'اكتب اسم المستخدم';
+        return;
+      }
+      let profilePic = '';
+      if (fileInput.files && fileInput.files[0]) {
+        profilePic = await compressImage(fileInput.files[0]);
+      }
+      const res = await registerUser(username, email, password, profilePic);
+      if (res.error) {
+        msgDiv.style.display = 'block';
+        msgDiv.textContent = res.error;
+      } else {
+        // ✅ تعيين currentUser مباشرة من النتيجة
+        currentUser = res.user;
+        renderMainScreen();
+      }
+    }
+  });
 
-    document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
-  }
+  document.getElementById('switchAuthMode').addEventListener('click', () => renderAuthScreen(!isLogin));
+}
 
   // دالة ضغط الصورة (نفسها)
-  function compressImage(file, maxW = 80, maxH = 80) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let w = img.width, h = img.height;
-          if (w > h) { if (w > maxW) { h *= maxW / w; w = maxW; } } else { if (h > maxH) { w *= maxH / h; h = maxH; } }
-          canvas.width = w; canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.7));
-        };
-        img.src = e.target.result;
+function compressImage(file, maxW = 80, maxH = 80) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxW) { h *= maxW / w; w = maxW; } } 
+        else { if (h > maxH) { w *= maxH / h; h = maxH; } }
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
       };
-      reader.readAsDataURL(file);
-    });
-  }
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
   // ===== الشاشة الرئيسية =====
   function renderMainScreen() {
@@ -898,8 +931,10 @@
   }
 
   // ===== مراقبة حالة المصادقة =====
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // إذا كان currentUser غير معرف (حالة تسجيل الدخول العادي)، نقرأ البيانات
+    if (!currentUser) {
       get(ref(db, `users/${user.uid}`)).then(snap => {
         const data = snap.val() || {};
         currentUser = {
@@ -911,14 +946,18 @@
         renderMainScreen();
       });
     } else {
-      currentUser = null;
-      if (postsListener) {
-        postsListener();
-        postsListener = null;
-      }
-      renderAuthScreen(true);
+      // إذا كان currentUser موجوداً (حالة التسجيل)، ننتقل مباشرة
+      renderMainScreen();
     }
-  });
+  } else {
+    currentUser = null;
+    if (postsListener) {
+      postsListener();
+      postsListener = null;
+    }
+    renderAuthScreen(true);
+  }
+});
 
   // بدء التشغيل (المصادقة ستقرر أي شاشة)
 </script>
